@@ -2,7 +2,6 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 type State = {
   info: string;
@@ -50,21 +49,17 @@ class App extends React.Component<{}, State> {
         console.log(data);
 
         this.setState({
-          pref_ja: data[i].pref_ja,
-          precip_1h: data[i].preall?.precip_1h
+          pref_ja: data[i]?.pref_ja || "--",
+          precip_1h: data[i]?.preall?.precip_1h
             ? data[i].preall?.precip_1h + "mm"
             : "--",
-          wind: data[i].max_wind?.max_wind_daily
-            ? data[i].max_wind?.max_wind_daily + "m/s"
+          wind: data[i]?.max_wind?.max_wind_daily
+            ? data[i]?.max_wind?.max_wind_daily + "m/s"
             : "--",
           stn_name_ja: data[i]?.stn_name_ja || "--",
           arraylength: data.length,
         });
       });
-  }
-
-  showTable(props: any) {
-    return <button onClick={props.onClick}>Login</button>;
   }
 
   render() {
@@ -98,6 +93,7 @@ class App extends React.Component<{}, State> {
           >
             Learn React
           </a>
+
           <input
             type="number"
             max={this.state.arraylength - 1}
