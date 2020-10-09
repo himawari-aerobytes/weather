@@ -11,7 +11,7 @@ type State = {
   updatedAt: string;
   precip_1h: string;
   pref_ja: string;
-  pref_ja_arry: any;
+  pref_ja_arry: Array<{ [key: string]: string }>;
   stn_name_ja: string;
   set_num: number;
   arraylength: number;
@@ -28,7 +28,7 @@ class App extends React.Component<{}, State> {
       updatedAt: "",
       precip_1h: "",
       pref_ja: "",
-      pref_ja_arry: new Array(String),
+      pref_ja_arry: [{}],
       stn_name_ja: "",
       set_num: 0,
       arraylength: 0,
@@ -126,6 +126,7 @@ class App extends React.Component<{}, State> {
               this.setState({ set_num: parseInt(e.target.value) })
             }
           />
+          <Select options={this.state.pref_ja_arry} />
 
           <button onClick={() => this.getAPI(this.state.set_num)}>
             GetData
