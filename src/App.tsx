@@ -2,8 +2,7 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
-import { Button, IconButton } from "react-toolbox/lib/button";
-import DatePicker from "react-toolbox/lib/date_picker";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 type State = {
   info: string;
@@ -12,6 +11,8 @@ type State = {
   precip_1h: string;
   pref_ja: string;
   stn_name_ja: string;
+  set_num: number;
+  arraylength: number;
 };
 
 class App extends React.Component<{}, State> {
@@ -25,45 +26,66 @@ class App extends React.Component<{}, State> {
       precip_1h: "",
       pref_ja: "",
       stn_name_ja: "",
+      set_num: 0,
+      arraylength: 1,
     };
     this.getAPI = this.getAPI.bind(this);
   }
 
-  getAPI(): void {
+  convert(APIString: string, ObjType: string): string {
+    const str: string = APIString || "";
+    return str;
+  }
+
+  getAPI(i: number, address: string = "札幌", pref_ja: string = "石狩"): void {
     axios
       .get("https://jjwd.info/api/v2/stations/search", {
         params: {
-          address: "松江",
-          pref_ja: "島根",
+          address: address,
+          pref_ja: pref_ja,
         },
       })
       .then((response) => {
-        const data = response.data;
+        const data = response.data.stations;
         console.log(data);
+
         this.setState({
-          info:
-            "pref: " +
-            `${
-              data.stations[0]?.pref_en ||
-              data.station?.pref_en ||
-              "Can Not Get"
-            }` +
-            "-" +
-            `${data.stations[0]?.stn_name_en || ""}`,
-          wind:
-            "MaxWind: " +
-            `${data.stations[0]?.max_wind?.max_wind_daily || "Can Not Get"}` +
-            "m/s",
+          pref_ja: data[i].pref_ja,
+          precip_1h: data[i].preall?.precip_1h
+            ? data[i].preall?.precip_1h + "mm"
+            : "--",
+          wind: data[i].max_wind?.max_wind_daily
+            ? data[i].max_wind?.max_wind_daily + "m/s"
+            : "--",
+          stn_name_ja: data[i]?.stn_name_ja || "--",
+          arraylength: data.length,
         });
       });
+  }
+
+  showTable(props: any) {
+    return <button onClick={props.onClick}>Login</button>;
   }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <p>{this.state.info}</p>
-          <p>{this.state.wind}</p>
+          <table>
+            <tr>
+              <th align="left">Station</th>
+              <td>{this.state.pref_ja}</td>
+              <td>{this.state.stn_name_ja}</td>
+            </tr>
+            <tr>
+              <th align="left">rainfall</th>
+              <td>{this.state.precip_1h}</td>
+            </tr>
+            <tr>
+              <th align="left">MaxWind</th>
+              <td>{this.state.wind}</td>
+            </tr>
+          </table>
           <img src={logo} className="App-logo" alt="logo" />
           <p>
             Edit <code>src/App.tsx</code> and save to reload.
@@ -76,7 +98,18 @@ class App extends React.Component<{}, State> {
           >
             Learn React
           </a>
-          <button onClick={this.getAPI}>GetData</button>
+          <input
+            type="number"
+            max={this.state.arraylength - 1}
+            min="0"
+            value={this.state.set_num}
+            onChange={(e) =>
+              this.setState({ set_num: parseInt(e.target.value) })
+            }
+          />
+          <button onClick={() => this.getAPI(this.state.set_num)}>
+            GetData
+          </button>
         </header>
       </div>
     );
