@@ -2,6 +2,8 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
+import Select from "react-select";
+import { isThisTypeNode } from "typescript";
 
 type State = {
   info: string;
@@ -9,9 +11,11 @@ type State = {
   updatedAt: string;
   precip_1h: string;
   pref_ja: string;
+  pref_ja_arry: any;
   stn_name_ja: string;
   set_num: number;
   arraylength: number;
+  InPref: string;
 };
 
 class App extends React.Component<{}, State> {
@@ -24,9 +28,11 @@ class App extends React.Component<{}, State> {
       updatedAt: "",
       precip_1h: "",
       pref_ja: "",
+      pref_ja_arry: new Array(String),
       stn_name_ja: "",
       set_num: 0,
-      arraylength: 1,
+      arraylength: 0,
+      InPref: "石狩",
     };
     this.getAPI = this.getAPI.bind(this);
   }
@@ -36,17 +42,21 @@ class App extends React.Component<{}, State> {
     return str;
   }
 
-  getAPI(i: number, address: string = "札幌", pref_ja: string = "石狩"): void {
+  getAPI(i: number, address: string = "", pref_ja: string = "石狩"): void {
     axios
       .get("https://jjwd.info/api/v2/stations/search", {
         params: {
           address: address,
-          pref_ja: pref_ja,
+          pref_ja: this.state.InPref,
         },
       })
       .then((response) => {
         const data = response.data.stations;
         console.log(data);
+        let str = "";
+        data.forEach((element: any) => {
+          str += element.stn_name_ja + "\n";
+        });
 
         this.setState({
           pref_ja: data[i]?.pref_ja || "--",
@@ -57,8 +67,12 @@ class App extends React.Component<{}, State> {
             ? data[i]?.max_wind?.max_wind_daily + "m/s"
             : "--",
           stn_name_ja: data[i]?.stn_name_ja || "--",
-          arraylength: data.length,
+          arraylength: data.length - 1,
+          pref_ja_arry: str,
         });
+      })
+      .catch((e) => {
+        alert(e);
       });
   }
 
@@ -73,7 +87,7 @@ class App extends React.Component<{}, State> {
               <td>{this.state.stn_name_ja}</td>
             </tr>
             <tr>
-              <th align="left">rainfall</th>
+              <th align="left">Rainfall</th>
               <td>{this.state.precip_1h}</td>
             </tr>
             <tr>
@@ -93,16 +107,25 @@ class App extends React.Component<{}, State> {
           >
             Learn React
           </a>
+          <input
+            type="text"
+            value={this.state.InPref}
+            onChange={(e) =>
+              this.setState({ InPref: escape_html(e.target.value) })
+            }
+          />
 
           <input
             type="number"
-            max={this.state.arraylength - 1}
+            max={this.state.arraylength}
             min="0"
-            value={this.state.set_num}
+            value={val(this.state.set_num, this.state.arraylength)}
             onChange={(e) =>
               this.setState({ set_num: parseInt(e.target.value) })
             }
           />
+          <p>{this.state.pref_ja_arry}</p>
+
           <button onClick={() => this.getAPI(this.state.set_num)}>
             GetData
           </button>
@@ -112,4 +135,12 @@ class App extends React.Component<{}, State> {
   }
 }
 
+const val = (num: number, max: number) => {
+  max = max < 0 ? 0 : max;
+  return num <= 0 ? 0 : num >= max ? max - 1 : num;
+};
+
+const escape_html = (str: string) => {
+  return str.replace(/[&'`"<>.\?,]/g, "");
+};
 export default App;
