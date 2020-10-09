@@ -54,10 +54,10 @@ class App extends React.Component<{}, State> {
         const data = response.data.stations;
         console.log(data);
         let str = [{}];
-        let i = 0;
+        let j = 0;
         data.forEach((element: any) => {
-          str.push({ value: i, label: element.stn_name_ja });
-          i++;
+          str.push({ value: j, label: element.stn_name_ja });
+          j++;
         });
 
         this.setState({
@@ -126,7 +126,6 @@ class App extends React.Component<{}, State> {
               this.setState({ set_num: parseInt(e.target.value) })
             }
           />
-          <p>{this.state.pref_ja_arry}</p>
 
           <button onClick={() => this.getAPI(this.state.set_num)}>
             GetData
