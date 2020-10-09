@@ -53,9 +53,11 @@ class App extends React.Component<{}, State> {
       .then((response) => {
         const data = response.data.stations;
         console.log(data);
-        let str = "";
+        let str = [{}];
+        let i = 0;
         data.forEach((element: any) => {
-          str += element.stn_name_ja + "\n";
+          str.push({ value: i, label: element.stn_name_ja });
+          i++;
         });
 
         this.setState({
