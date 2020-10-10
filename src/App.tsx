@@ -2,8 +2,6 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
-import Select from "react-select";
-import { isThisTypeNode } from "typescript";
 
 type State = {
   info: string;
@@ -11,7 +9,7 @@ type State = {
   updatedAt: string;
   precip_1h: string;
   pref_ja: string;
-  pref_ja_arry: Array<{ [key: string]: string }>;
+  pref_ja_arry: Array<{ [key: string]: string }> | null;
   stn_name_ja: string;
   set_num: number;
   arraylength: number;
@@ -31,7 +29,7 @@ class App extends React.Component<{}, State> {
       pref_ja_arry: [{}],
       stn_name_ja: "",
       set_num: 0,
-      arraylength: 0,
+      arraylength: 1,
       InPref: "石狩",
     };
     this.getAPI = this.getAPI.bind(this);
@@ -126,7 +124,17 @@ class App extends React.Component<{}, State> {
               this.setState({ set_num: parseInt(e.target.value) })
             }
           />
-          <Select options={this.state.pref_ja_arry} />
+
+          <select
+            onChange={(e) =>
+              this.setState({ set_num: parseInt(e.target.value) })
+            }
+            defaultValue=""
+          >
+            {this.state.pref_ja_arry?.map((d) => (
+              <option value={d.value}>{d.label}</option>
+            )) || ""}
+          </select>
 
           <button onClick={() => this.getAPI(this.state.set_num)}>
             GetData
@@ -139,10 +147,11 @@ class App extends React.Component<{}, State> {
 
 const val = (num: number, max: number) => {
   max = max < 0 ? 0 : max;
-  return num <= 0 ? 0 : num >= max ? max - 1 : num;
+  return num > max ? max - 1 : num === 0 ? 0 : num - 1;
 };
 
 const escape_html = (str: string) => {
   return str.replace(/[&'`"<>.\?,]/g, "");
 };
+
 export default App;
