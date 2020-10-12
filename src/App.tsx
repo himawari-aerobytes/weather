@@ -49,10 +49,10 @@ class App extends React.Component<{}, State> {
       .then((response) => {
         const data = response.data.stations;
         console.log(data);
-        let str = [{}];
+        let str=[{}];
         let j = 0;
         data.forEach((element: any) => {
-          str.push({ value: j, label: element.stn_name_ja });
+          str[j]={ value: j.toString(), label: element.stn_name_ja };
           j++;
         });
 
@@ -98,7 +98,7 @@ class App extends React.Component<{}, State> {
             type="text"
             value={this.state.InPref}
             onChange={(e) =>
-              this.setState({ InPref: escape_html(e.target.value) })
+              this.setState({ InPref: e.target.value })
             }
           />
 
@@ -135,10 +135,6 @@ class App extends React.Component<{}, State> {
 const val = (num: number, max: number) => {
   max = max < 0 ? 0 : max;
   return num > max ? max - 1 : num === 0 ? 0 : num - 1;
-};
-
-const escape_html = (str: string) => {
-  return str.replace(/[&'`"<>.?,]/g, "");
 };
 
 export default App;
