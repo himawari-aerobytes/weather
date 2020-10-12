@@ -1,6 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 import axios from "axios";
 
 type State = {
@@ -95,18 +93,7 @@ class App extends React.Component<{}, State> {
               <td>{this.state.wind}</td>
             </tr>
           </table>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+
           <input
             type="text"
             value={this.state.InPref}
@@ -151,7 +138,7 @@ const val = (num: number, max: number) => {
 };
 
 const escape_html = (str: string) => {
-  return str.replace(/[&'`"<>.\?,]/g, "");
+  return str.replace(/[&'`"<>.?,]/g, "");
 };
 
 export default App;
