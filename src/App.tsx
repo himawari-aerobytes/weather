@@ -1,9 +1,10 @@
 import React from "react";
 import axios from "axios";
+import rain from './2031244-0177b2.svg';
+import sunny from './1314952-0177b2.svg'
 
 type State = {
-  info: string;
-  wind: string;
+  wind: number|string;
   updatedAt: string;
   precip_1h: string;
   pref_ja: string;
@@ -12,6 +13,10 @@ type State = {
   set_num: number;
   arraylength: number;
   InPref: string;
+  Max_Temp:number|string;
+  Min_Temp:number|string;
+  address : string;
+
 };
 
 class App extends React.Component<{}, State> {
@@ -19,7 +24,6 @@ class App extends React.Component<{}, State> {
     super(props);
 
     this.state = {
-      info: "",
       wind: "",
       updatedAt: "",
       precip_1h: "",
@@ -29,9 +33,44 @@ class App extends React.Component<{}, State> {
       set_num: 0,
       arraylength: 1,
       InPref: "石狩",
+      Max_Temp:"",
+      Min_Temp:"",
+      address:"",
     };
     this.getAPI = this.getAPI.bind(this);
   }
+
+  handleInPref(str:string){
+    const selBranch=[
+                {value:"0",label:"宗谷"},
+                {value:"1",label:"上川"},
+                {value:"2",label:"オホーツク"},
+                {value:"3",label:"根室"},
+                {value:"4",label:"釧路"},
+                {value:"5",label:"十勝"},
+                {value:"6",label:"日高"},
+                {value:"7",label:"胆振"},
+                {value:"8",label:"後志"},
+                {value:"9",label:"檜山"},
+                {value:"10",label:"渡島"},
+                {value:"11",label:"石狩"},
+                {value:"12",label:"留萌"},
+    ];
+
+    if(str==="北海道"){
+      return(
+        selBranch.map((d) => (
+          <option value={d.value}>{d.label}</option>
+        )) || ""
+      );
+    }else{
+      this.setState({InPref:str});
+      return;
+    }
+
+  }
+
+
 
   convert(APIString: string, ObjType: string): string {
     const str: string = APIString || "";
@@ -47,7 +86,8 @@ class App extends React.Component<{}, State> {
         },
       })
       .then((response) => {
-        const data = response.data.stations;
+        const data = response?.data?.stations||[{}];
+
         console.log(data);
         let str=[{}];
         let j = 0;
@@ -67,52 +107,88 @@ class App extends React.Component<{}, State> {
           stn_name_ja: data[i]?.stn_name_ja || "--",
           arraylength: data.length - 1,
           pref_ja_arry: str,
+          Max_Temp:data[i]?.max_temp?.temp_daily_max ? data[i]?.max_temp?.temp_daily_max+"℃" :"情報がありません",
+          Min_Temp:data[i]?.min_temp?.temp_daily_min ? data[i]?.min_temp?.temp_daily_min+"℃" : "情報はありません",
+          address : data[i]?.address ? data[i]?.address : "",
         });
       })
       .catch((e) => {
-        alert(e);
+        alert("debugger\n"+e);
+        alert("データが取得できませんでした");
       });
   }
+  showWeatherImg = (rain:string)=>{
+    switch(rain) {
+      case "--":
+        return (<img src={rain} width="100" alt="傘の画像"/>);
+      default:
+        return (<img src={sunny}width="100" alt="傘の画像"/>);
+    }
+  
+  
+  };
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <table>
+          <div>
+            <h2>観測点の情報</h2>
+          <table width="500">
             <tr>
-              <th align="left">Station</th>
-              <td>{this.state.pref_ja}</td>
-              <td>{this.state.stn_name_ja}</td>
+              <th align="left">県名(振興局)</th>
+              <th align="left">観測所名</th>
+              <th align="left">観測所住所</th>
             </tr>
             <tr>
-              <th align="left">Rainfall</th>
+              <td>{this.state.pref_ja}</td>
+              <td>{this.state.stn_name_ja}</td>
+              <td>{this.state.address}</td>
+            </tr>
+            </table>
+            </div>
+<h2>現在までの情報</h2>
+
+
+            <table width="500">
+        
+            <tr>
+              <th align="left"></th>
+              <td>最高気温</td>
+              <td>最低気温</td>
+            </tr>
+            <tr>
+              <th align="left">気温</th>
+              <td>{this.state.Min_Temp}</td>
+              <td>{this.state.Max_Temp}</td>
+            </tr>
+            <tr>
+              <th align="left">雨量(1h)</th>
               <td>{this.state.precip_1h}</td>
             </tr>
             <tr>
-              <th align="left">MaxWind</th>
+              <th align="left">最大瞬間風速(1日)</th>
               <td>{this.state.wind}</td>
             </tr>
           </table>
-
-          <input
-            type="text"
-            value={this.state.InPref}
-            onChange={(e) =>
-              this.setState({ InPref: e.target.value })
-            }
+<div>
+          <table>
+            <tr>
+            <th>県名</th>
+            <td>
+              <input
+                type="text"
+                value={this.state.InPref}
+                onChange={(e) =>
+                  this.setState({ InPref: e.target.value})
+                }
           />
-
-          <input
-            type="number"
-            max={this.state.arraylength}
-            min="0"
-            value={val(this.state.set_num, this.state.arraylength)}
-            onChange={(e) =>
-              this.setState({ set_num: parseInt(e.target.value) })
-            }
-          />
-
-          <select
+            </td>
+            </tr>
+            <tr>
+              <th>観測所名</th>
+              <td>
+              <select
             onChange={(e) =>
               this.setState({ set_num: parseInt(e.target.value) })
             }
@@ -123,6 +199,16 @@ class App extends React.Component<{}, State> {
             )) || ""}
           </select>
 
+              </td>
+            </tr>
+           
+          </table>
+</div>
+         
+
+
+         
+
           <button onClick={() => this.getAPI(this.state.set_num)}>
             GetData
           </button>
@@ -132,9 +218,8 @@ class App extends React.Component<{}, State> {
   }
 }
 
-const val = (num: number, max: number) => {
-  max = max < 0 ? 0 : max;
-  return num > max ? max - 1 : num === 0 ? 0 : num - 1;
-};
+
 
 export default App;
+
+
