@@ -5,14 +5,18 @@ import Select from "react-select";
 import "./App.css";
 import Table from 'react-bootstrap/Table';
 import { Header, Icon, Item,Button } from 'semantic-ui-react';
+import { throws } from "assert";
+import Comments from "./comments";
+import { exit } from "process";
 
 
 
 
 type State = {
+  InputState:number;
   wind: number|string;
   updatedAt: string;
-  precip_1h: string;
+  precip_1h: number|undefined;
   pref_ja: string;
   pref_ja_arry: Array<{ [key: string]: string }> | null;
   stn_name_ja: string;
@@ -31,9 +35,10 @@ class App extends React.Component<{}, State> {
     super(props);
 
     this.state = {
+      InputState:0,
       wind: "",
       updatedAt: "",
-      precip_1h: "",
+      precip_1h: undefined,
       pref_ja: "",
       pref_ja_arry: [{}],
       stn_name_ja: "",
@@ -103,12 +108,15 @@ class App extends React.Component<{}, State> {
           str[j]={ value: j.toString(), label: element.stn_name_ja };
           j++;
         });
+        
+        if(data===undefined){
+          throw new Error("Cannot Get");
+        }
 
         this.setState({
+          InputState:1,
           pref_ja: data[i]?.pref_ja || "--",
-          precip_1h: data[i].preall.precip_1h !== null
-            ? data[i].preall.precip_1h + "mm"
-            : "情報がありません",
+          precip_1h: data[i]?.preall?.precip_1h !== undefined ?  data[i].preall.precip_1h : undefined,
           wind: data[i]?.max_wind?.max_wind_daily
             ? data[i]?.max_wind?.max_wind_daily + "m/s"
             : "--",
@@ -119,63 +127,32 @@ class App extends React.Component<{}, State> {
           Min_Temp:data[i]?.min_temp?.temp_daily_min ? data[i]?.min_temp?.temp_daily_min+"℃" : "情報はありません",
           address : data[i]?.address ? data[i]?.address : "",
         });
+
+        if(this.state.arraylength === -1){
+          this.setState({InputState:3})
+          throw new Error ("正しい県名ですか？");
+        }
       })
       .catch((e) => {
         alert("debugger\n"+e);
         alert("データが取得できませんでした");
-      });
+      })
+      .finally(()=>exit);
+  }
+
+  judgeNull(data:any){
+
+
   }
 
 
 
   render() {
     return (
-
       <div className="App">
         <header className="App-header">
-          <div>
-            <h2>観測点の情報</h2>
-            <Button content='Click Here'/>
-          <Table width="500" variant="dark">
-            <tr>
-              <th align="left">県名(振興局)</th>
-              <th align="left">観測所名</th>
-              <th align="left">観測所住所</th>
-            </tr>
-            <tr>
-              <td>{this.state.pref_ja}</td>
-              <td>{this.state.stn_name_ja}</td>
-              <td>{this.state.address}</td>
-            </tr>
-            </Table>
-            </div>
-<h2>現在の情報</h2>
-
-
-
-            <Table width="500" variant="dark">
-        
-            <tr>
-              <th align="left"></th>
-              <td>最高気温</td>
-              <td>最低気温</td>
-            </tr>
-            <tr>
-              <th align="left">気温</th>
-              <td>{this.state.Min_Temp}</td>
-              <td>{this.state.Max_Temp}</td>
-            </tr>
-            <tr>
-              <th align="left">雨量(1h)</th>
-              <td><WeatherIcon rain={this.state.precip_1h}  /></td>
-              <td>{this.state.precip_1h}</td>
-            </tr>
-            <tr>
-              <th align="left">最大瞬間風速(1日)</th>
-              <td>{this.state.wind}</td>
-            </tr>
-          </Table>
-<div>
+        <div>
+          <Comments arry={inputcomments} state={this.state.InputState} />
           <table>
             <tr>
             <th>県名</th>
@@ -205,22 +182,83 @@ class App extends React.Component<{}, State> {
 
               </td>
             </tr>
+            <tr>
+              <td colSpan={2} align="center" >
+              <button onClick={() => this.getAPI(this.state.set_num)}>
+            情報を取得
+          </button>
+              </td>
+
+            </tr>
            
           </table>
+         
 </div>
+
+<h2>現在の情報</h2>
+
+
+
+            <Table width="500" variant="dark">
+        
+            <tr>
+              <th align="left"></th>
+              <td>最高気温</td>
+              <td>最低気温</td>
+            </tr>
+            <tr>
+              <th align="left">気温</th>
+              <td>{this.state.Min_Temp}</td>
+              <td>{this.state.Max_Temp}</td>
+            </tr>
+            <tr>
+              <th align="left">雨量(1h)</th>
+              <td colSpan={2}><WeatherIcon rain={this.state.precip_1h}  />
+              </td>
+              
+            </tr>
+            <tr>
+              <th align="left">最大瞬間風速(1日)</th>
+              <td colSpan={2}>{this.state.wind}</td>
+            </tr>
+          </Table>
+
+          <div>
+            <h2>観測点の情報</h2>
+            <Button content='Click Here'/>
+          <Table width="500" variant="dark">
+            <tr>
+              <th align="left">県名(振興局)</th>
+              <th align="left">観測所名</th>
+              <th align="left">観測所住所</th>
+            </tr>
+            <tr>
+              <td>{this.state.pref_ja}</td>
+              <td>{this.state.stn_name_ja}</td>
+              <td>{this.state.address}</td>
+            </tr>
+            </Table>
+            </div>
+
          
 
 
          
 
-          <button onClick={() => this.getAPI(this.state.set_num)}>
-            GetData
-          </button>
+         
         </header>
       </div>
     );
   }
 }
+
+const inputcomments = [
+  "1.最初に県名を入力してください",
+  "2.観測所名を指定してください",
+  "",
+  "正しい県名を入れてください"
+
+]
 
 
 
