@@ -140,9 +140,8 @@ class App extends React.Component<{}, State> {
       .finally(()=>exit);
   }
 
-  judgeNull(data:any){
-
-
+  setStatePref(Pref:string){
+    this.setState({pref_ja:Pref});
   }
 
 
