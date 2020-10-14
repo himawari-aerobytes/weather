@@ -8,7 +8,7 @@ type Props = {
 class WeatherIcon extends Component<Props> { 
     render(){
         return(
-            this.props.rain === "--" ? <p>現在雨は降っていません。</p> :this.props.rain === "" ? <p>NODATA</p> :<img src={rain} width="100" alt="雨"/> 
+            this.props.rain === "--" ? <p>現在雨は降っていません。</p> :this.props.rain === "" ? <p>NODATA</p> :<img src={rain} width="50" alt="雨"/> 
 
         )
     }

@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+//import "./css/bootstrap.css";
+
 
 ReactDOM.render(
   <React.StrictMode>
+    <div className="container">
     <h1>Weather Information</h1>
     <App />
+    </div>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -2,6 +2,11 @@ import React from "react";
 import axios from "axios";
 import WeatherIcon from "./weather";
 import Select from "react-select";
+import "./App.css";
+import Table from 'react-bootstrap/Table';
+import { Header, Icon, Item,Button } from 'semantic-ui-react';
+
+
 
 
 type State = {
@@ -16,6 +21,7 @@ type State = {
   InPref: string;
   Max_Temp:number|string;
   Min_Temp:number|string;
+  Update:string|null;
   address : string;
 
 };
@@ -37,6 +43,7 @@ class App extends React.Component<{}, State> {
       Max_Temp:"",
       Min_Temp:"",
       address:"",
+      Update:"",
     };
     this.getAPI = this.getAPI.bind(this);
   }
@@ -99,9 +106,9 @@ class App extends React.Component<{}, State> {
 
         this.setState({
           pref_ja: data[i]?.pref_ja || "--",
-          precip_1h: data[i]?.preall?.precip_1h
-            ? data[i].preall?.precip_1h + "mm"
-            : "--",
+          precip_1h: data[i].preall.precip_1h !== null
+            ? data[i].preall.precip_1h + "mm"
+            : "情報がありません",
           wind: data[i]?.max_wind?.max_wind_daily
             ? data[i]?.max_wind?.max_wind_daily + "m/s"
             : "--",
@@ -123,11 +130,13 @@ class App extends React.Component<{}, State> {
 
   render() {
     return (
+
       <div className="App">
         <header className="App-header">
           <div>
             <h2>観測点の情報</h2>
-          <table width="500">
+            <Button content='Click Here'/>
+          <Table width="500" variant="dark">
             <tr>
               <th align="left">県名(振興局)</th>
               <th align="left">観測所名</th>
@@ -138,14 +147,13 @@ class App extends React.Component<{}, State> {
               <td>{this.state.stn_name_ja}</td>
               <td>{this.state.address}</td>
             </tr>
-            </table>
+            </Table>
             </div>
-<h2>現在までの情報</h2>
-
-<WeatherIcon rain={this.state.precip_1h}  />
+<h2>現在の情報</h2>
 
 
-            <table width="500">
+
+            <Table width="500" variant="dark">
         
             <tr>
               <th align="left"></th>
@@ -159,13 +167,14 @@ class App extends React.Component<{}, State> {
             </tr>
             <tr>
               <th align="left">雨量(1h)</th>
+              <td><WeatherIcon rain={this.state.precip_1h}  /></td>
               <td>{this.state.precip_1h}</td>
             </tr>
             <tr>
               <th align="left">最大瞬間風速(1日)</th>
               <td>{this.state.wind}</td>
             </tr>
-          </table>
+          </Table>
 <div>
           <table>
             <tr>
