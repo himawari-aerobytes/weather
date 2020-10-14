@@ -1,7 +1,8 @@
 import React from "react";
 import axios from "axios";
-import rain from './2031244-0177b2.svg';
-import sunny from './1314952-0177b2.svg'
+import WeatherIcon from "./weather";
+import Select from "react-select";
+
 
 type State = {
   wind: number|string;
@@ -117,16 +118,8 @@ class App extends React.Component<{}, State> {
         alert("データが取得できませんでした");
       });
   }
-  showWeatherImg = (rain:string)=>{
-    switch(rain) {
-      case "--":
-        return (<img src={rain} width="100" alt="傘の画像"/>);
-      default:
-        return (<img src={sunny}width="100" alt="傘の画像"/>);
-    }
-  
-  
-  };
+
+
 
   render() {
     return (
@@ -148,6 +141,8 @@ class App extends React.Component<{}, State> {
             </table>
             </div>
 <h2>現在までの情報</h2>
+
+<WeatherIcon rain={this.state.precip_1h}  />
 
 
             <table width="500">
