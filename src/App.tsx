@@ -8,13 +8,14 @@ import { Header, Icon, Item,Button } from 'semantic-ui-react';
 import { throws } from "assert";
 import Comments from "./comments";
 import { exit } from "process";
+import NowInformation from "./NowInformation"
 
 
 
 
 type State = {
   InputState:number;
-  wind: number|string;
+  wind: number|undefined;
   updatedAt: string;
   precip_1h: number|undefined;
   pref_ja: string;
@@ -23,8 +24,8 @@ type State = {
   set_num: number;
   arraylength: number;
   InPref: string;
-  Max_Temp:number|string;
-  Min_Temp:number|string;
+  Max_Temp:number|undefined;
+  Min_Temp:number|undefined;
   Update:string|null;
   address : string;
 
@@ -36,7 +37,7 @@ class App extends React.Component<{}, State> {
 
     this.state = {
       InputState:0,
-      wind: "",
+      wind: undefined,
       updatedAt: "",
       precip_1h: undefined,
       pref_ja: "",
@@ -45,8 +46,8 @@ class App extends React.Component<{}, State> {
       set_num: 0,
       arraylength: 1,
       InPref: "石狩",
-      Max_Temp:"",
-      Min_Temp:"",
+      Max_Temp:undefined,
+      Min_Temp:undefined,
       address:"",
       Update:"",
     };
@@ -115,20 +116,20 @@ class App extends React.Component<{}, State> {
 
         this.setState({
           InputState:1,
-          pref_ja: data[i]?.pref_ja || "--",
+          pref_ja: data[i]?.pref_ja ||"",
           precip_1h: data[i]?.preall?.precip_1h !== undefined ?  data[i].preall.precip_1h : undefined,
           wind: data[i]?.max_wind?.max_wind_daily
-            ? data[i]?.max_wind?.max_wind_daily + "m/s"
-            : "--",
+            ? data[i]?.max_wind?.max_wind_daily 
+            : null,
           stn_name_ja: data[i]?.stn_name_ja || "--",
           arraylength: data.length - 1,
           pref_ja_arry: str,
-          Max_Temp:data[i]?.max_temp?.temp_daily_max ? data[i]?.max_temp?.temp_daily_max+"℃" :"情報がありません",
-          Min_Temp:data[i]?.min_temp?.temp_daily_min ? data[i]?.min_temp?.temp_daily_min+"℃" : "情報はありません",
+          Max_Temp:data[i]?.max_temp?.temp_daily_max ? data[i]?.max_temp?.temp_daily_max: null,
+          Min_Temp:data[i]?.min_temp?.temp_daily_min ? data[i]?.min_temp?.temp_daily_min : null,
           address : data[i]?.address ? data[i]?.address : "",
         });
 
-        if(this.state.arraylength === -1){
+        if(this.state.arraylength <= 0){
           this.setState({InputState:3})
           throw new Error ("正しい県名ですか？");
         }
@@ -192,34 +193,11 @@ class App extends React.Component<{}, State> {
           </table>
 </div>
 
-<h2>現在の情報</h2>
-
-
-
-            <Table width="500" variant="dark">
-        
-            <tr>
-              <th align="left"></th>
-              <td>最高気温</td>
-              <td>最低気温</td>
-            </tr>
-            <tr>
-              <th align="left">気温</th>
-              <td>{this.state.Min_Temp}</td>
-              <td>{this.state.Max_Temp}</td>
-            </tr>
-            <tr>
-              <th align="left">雨量(1h)</th>
-              <td colSpan={2}><WeatherIcon rain={this.state.precip_1h}  />
-              </td>
-              
-            </tr>
-            <tr>
-              <th align="left">最大瞬間風速(1日)</th>
-              <td colSpan={2}>{this.state.wind}</td>
-            </tr>
-          </Table>
-
+          <NowInformation 
+          Min_Temp={this.state.Min_Temp} 
+          Max_Temp={this.state.Max_Temp} 
+          precip_1h={this.state.precip_1h} 
+          wind={this.state.wind} />
           <div>
             <h2>観測点の情報</h2>
             <Button content='Click Here'/>

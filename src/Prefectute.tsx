@@ -1,7 +1,5 @@
 import React,{Component} from 'react';
 
-
-
 class Prefecturte extends Component { 
     render(){
         return(
@@ -9,23 +7,13 @@ class Prefecturte extends Component {
                 <p>北海道</p>
                 <table>
                 <tr>
-                {HokkaidoBranch.map((d)=>(<button onClick={()=>}>d.label</td>))}
                 </tr>
                 </table>
-                
-
+            </div>
                 
                 )
 
-                
-            </div>
-
-           
-        )
     }
-
-    
-
 }
 
 const HokkaidoBranch=[
@@ -44,4 +32,4 @@ const HokkaidoBranch=[
     {value:"12",label:"留萌"},
 ];
 
-export default Prefecture 
+export default Prefecturte

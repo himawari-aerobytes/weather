@@ -9,7 +9,7 @@ class WeatherIcon extends Component<Props> {
     render(){
         return(
             <div>
-            {this.props.rain === 0 ? <p>現在雨は降っていません。</p> :this.props.rain === undefined ? "" :<div>{this.props.rain}mm<img src={rain} width="50" alt="雨"/> 傘が必要です</div>}
+            {this.props.rain === 0 ? <p>現在雨は降っていません。</p> :this.props.rain === undefined ? "" :<div><p><img src={rain} width="50" alt="雨"/>傘が必要です</p>{this.props.rain}mm </div>}
             </div>
         )
     }
