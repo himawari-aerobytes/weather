@@ -7,6 +7,7 @@ import NowInformation from "./NowInformation";
 import Point from "./Point";
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Fade from "@material-ui/core/Fade";
 
 
 
@@ -199,7 +200,9 @@ class App extends React.Component<{}, State> {
           </table>
           </Grid>
           <Grid item xs={12}>
-          {this.renderNowWeather(this.state.InputState)}
+            <Fade in={this.state.InputState === 2 ? true:false}>
+              {this.renderNowWeather(this.state.InputState)}
+            </Fade>
           </Grid>
          </Grid>
       </div>
@@ -213,7 +216,7 @@ const inputcomments = [
   "",
   "正しい県名を入れてください"
 
-]
+];
 
 
 
