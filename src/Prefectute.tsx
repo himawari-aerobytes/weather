@@ -1,18 +1,9 @@
-import React,{Component} from 'react';
+import React from "react";
 
-class Prefecturte extends Component { 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+class Prefecturte extends React.Component { 
     render(){
-        return(
-            <div>
-                <p>北海道</p>
-                <table>
-                <tr>
-                </tr>
-                </table>
-            </div>
-                
-                )
-
+        return(<p></p>)
     }
 }
 

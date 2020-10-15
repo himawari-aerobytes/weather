@@ -1,15 +1,12 @@
 import React from "react";
 import axios from "axios";
-import WeatherIcon from "./weather";
-import Select from "react-select";
 import "./App.css";
-import Table from 'react-bootstrap/Table';
-import { Header, Icon, Item,Button } from 'semantic-ui-react';
-import { throws } from "assert";
 import Comments from "./comments";
 import { exit } from "process";
 import NowInformation from "./NowInformation";
 import Point from "./Point";
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 
 
@@ -168,8 +165,11 @@ class App extends React.Component<{}, State> {
   render() {
     return (
       <div className="App">
-        <div>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
           <Comments arry={inputcomments} state={this.state.InputState} />
+          </Grid>
+          <Grid item xs={12}>
           <table>
             <tr>
             <th>県名</th>
@@ -190,15 +190,18 @@ class App extends React.Component<{}, State> {
             
             <tr>
               <td colSpan={2} align="center" >
-              <button onClick={() => this.getAPI(this.state.set_num)}>
+              <Button variant="contained" color="primary" onClick={() => this.getAPI(this.state.set_num)}>
             情報を取得
-          </button>
+          </Button>
               </td>
 
             </tr>
           </table>
-</div>
+          </Grid>
+          <Grid item xs={12}>
           {this.renderNowWeather(this.state.InputState)}
+          </Grid>
+         </Grid>
       </div>
     );
   }
