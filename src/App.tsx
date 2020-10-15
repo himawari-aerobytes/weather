@@ -189,9 +189,7 @@ class App extends React.Component<{}, State> {
               </td>
 
             </tr>
-           
           </table>
-         
 </div>
 
 <h2>現在の情報</h2>
