@@ -80,7 +80,7 @@ class App extends React.Component<{}, State> {
         }
 
         this.setState({
-          InputState:1,
+          InputState:this.state.InputState === 0 ? 1: this.state.InputState === 1 ? 2 : 2,
           pref_ja: data[i]?.pref_ja ||"",
           precip_1h: data[i]?.preall?.precip_1h !== undefined ?  data[i].preall.precip_1h : undefined,
           wind: data[i]?.max_wind?.max_wind_daily
@@ -106,9 +106,11 @@ class App extends React.Component<{}, State> {
       .finally(()=>exit);
   }
   renderInputPoint(State:number){
-    if(State === 1){
+    if(State >= 1){
+
       return (
         <tr>
+          <td>観測点</td>
           <td>
           <select
             onChange={(e) =>
@@ -125,7 +127,7 @@ class App extends React.Component<{}, State> {
           </tr>
       )
       }else{
-        return <p></p>
+        return <tr></tr>
 
       }
       
@@ -134,34 +136,38 @@ class App extends React.Component<{}, State> {
   }
 
   renderNowWeather(State:number){
-    if(State === 0 ){
-      return <p></p>
+    if(State === 2 ){
+
+      return (
+        <div>
+          <NowInformation 
+            Min_Temp={this.state.Min_Temp} 
+            Max_Temp={this.state.Max_Temp} 
+            precip_1h={this.state.precip_1h} 
+            wind={this.state.wind} 
+          />
+  
+          <Point 
+            pref_ja={this.state.pref_ja}
+            stn_name_ja={this.state.stn_name_ja}
+            address={this.state.address}
+          />
+  
+      </div>
+  
+      )
+  
     }else{
-    return (
-      <div>
-        <NowInformation 
-          Min_Temp={this.state.Min_Temp} 
-          Max_Temp={this.state.Max_Temp} 
-          precip_1h={this.state.precip_1h} 
-          wind={this.state.wind} 
-        />
-
-        <Point 
-          pref_ja={this.state.pref_ja}
-          stn_name_ja={this.state.stn_name_ja}
-          address={this.state.address}
-        />
-
-    </div>
-
-    )
+      return (
+        <p></p>
+      )
+    
     }
   }
 
   render() {
     return (
       <div className="App">
-        <header className="App-header">
         <div>
           <Comments arry={inputcomments} state={this.state.InputState} />
           <table>
@@ -177,24 +183,11 @@ class App extends React.Component<{}, State> {
           />
             </td>
 
-            </tr>
 
-            <tr>
-              <th>観測所名</th>
-              <td>
-              <select
-            onChange={(e) =>
-              this.setState({ set_num: parseInt(e.target.value) })
-            }
-            defaultValue=""
-          >
-            {this.state.pref_ja_arry?.map((d) => (
-              <option value={d.value}>{d.label}</option>
-            )) || ""}
-          </select>
 
-              </td>
             </tr>
+            {this.renderInputPoint(this.state.InputState)}
+            
             <tr>
               <td colSpan={2} align="center" >
               <button onClick={() => this.getAPI(this.state.set_num)}>
@@ -206,8 +199,6 @@ class App extends React.Component<{}, State> {
           </table>
 </div>
           {this.renderNowWeather(this.state.InputState)}
-
-        </header>
       </div>
     );
   }
