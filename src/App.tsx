@@ -8,7 +8,8 @@ import { Header, Icon, Item,Button } from 'semantic-ui-react';
 import { throws } from "assert";
 import Comments from "./comments";
 import { exit } from "process";
-import NowInformation from "./NowInformation"
+import NowInformation from "./NowInformation";
+import Point from "./Point";
 
 
 
@@ -54,42 +55,6 @@ class App extends React.Component<{}, State> {
     this.getAPI = this.getAPI.bind(this);
   }
 
-  handleInPref(str:string){
-    const selBranch=[
-                {value:"0",label:"宗谷"},
-                {value:"1",label:"上川"},
-                {value:"2",label:"オホーツク"},
-                {value:"3",label:"根室"},
-                {value:"4",label:"釧路"},
-                {value:"5",label:"十勝"},
-                {value:"6",label:"日高"},
-                {value:"7",label:"胆振"},
-                {value:"8",label:"後志"},
-                {value:"9",label:"檜山"},
-                {value:"10",label:"渡島"},
-                {value:"11",label:"石狩"},
-                {value:"12",label:"留萌"},
-    ];
-
-    if(str==="北海道"){
-      return(
-        selBranch.map((d) => (
-          <option value={d.value}>{d.label}</option>
-        )) || ""
-      );
-    }else{
-      this.setState({InPref:str});
-      return;
-    }
-
-  }
-
-
-
-  convert(APIString: string, ObjType: string): string {
-    const str: string = APIString || "";
-    return str;
-  }
 
   getAPI(i: number, address: string = "", pref_ja: string = "石狩"): void {
     axios
@@ -140,12 +105,6 @@ class App extends React.Component<{}, State> {
       })
       .finally(()=>exit);
   }
-
-  setStatePref(Pref:string){
-    this.setState({pref_ja:Pref});
-  }
-
-
 
   render() {
     return (
@@ -198,29 +157,12 @@ class App extends React.Component<{}, State> {
           Max_Temp={this.state.Max_Temp} 
           precip_1h={this.state.precip_1h} 
           wind={this.state.wind} />
-          <div>
-            <h2>観測点の情報</h2>
-            <Button content='Click Here'/>
-          <Table width="500" variant="dark">
-            <tr>
-              <th align="left">県名(振興局)</th>
-              <th align="left">観測所名</th>
-              <th align="left">観測所住所</th>
-            </tr>
-            <tr>
-              <td>{this.state.pref_ja}</td>
-              <td>{this.state.stn_name_ja}</td>
-              <td>{this.state.address}</td>
-            </tr>
-            </Table>
-            </div>
 
-         
-
-
-         
-
-         
+          <Point 
+          pref_ja={this.state.pref_ja}
+          stn_name_ja={this.state.stn_name_ja}
+          address={this.state.address}
+          />
         </header>
       </div>
     );
