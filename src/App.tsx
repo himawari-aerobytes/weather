@@ -105,6 +105,58 @@ class App extends React.Component<{}, State> {
       })
       .finally(()=>exit);
   }
+  renderInputPoint(State:number){
+    if(State === 1){
+      return (
+        <tr>
+          <td>
+          <select
+            onChange={(e) =>
+              this.setState({ set_num: parseInt(e.target.value) })
+            }
+            defaultValue=""
+          >
+            {this.state.pref_ja_arry?.map((d) => (
+              <option value={d.value}>{d.label}</option>
+            )) || ""}
+          </select>
+
+              </td>
+          </tr>
+      )
+      }else{
+        return <p></p>
+
+      }
+      
+
+
+  }
+
+  renderNowWeather(State:number){
+    if(State === 0 ){
+      return <p></p>
+    }else{
+    return (
+      <div>
+        <NowInformation 
+          Min_Temp={this.state.Min_Temp} 
+          Max_Temp={this.state.Max_Temp} 
+          precip_1h={this.state.precip_1h} 
+          wind={this.state.wind} 
+        />
+
+        <Point 
+          pref_ja={this.state.pref_ja}
+          stn_name_ja={this.state.stn_name_ja}
+          address={this.state.address}
+        />
+
+    </div>
+
+    )
+    }
+  }
 
   render() {
     return (
@@ -124,7 +176,9 @@ class App extends React.Component<{}, State> {
                 }
           />
             </td>
+
             </tr>
+
             <tr>
               <th>観測所名</th>
               <td>
@@ -151,18 +205,8 @@ class App extends React.Component<{}, State> {
             </tr>
           </table>
 </div>
+          {this.renderNowWeather(this.state.InputState)}
 
-          <NowInformation 
-          Min_Temp={this.state.Min_Temp} 
-          Max_Temp={this.state.Max_Temp} 
-          precip_1h={this.state.precip_1h} 
-          wind={this.state.wind} />
-
-          <Point 
-          pref_ja={this.state.pref_ja}
-          stn_name_ja={this.state.stn_name_ja}
-          address={this.state.address}
-          />
         </header>
       </div>
     );
