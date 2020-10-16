@@ -8,6 +8,8 @@ import Point from "./Point";
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Fade from "@material-ui/core/Fade";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 
 type State = {
@@ -108,14 +110,14 @@ class App extends React.Component<{}, State> {
         <tr>
           <td>観測点</td>
           <td>
-          <Select
-            onChange={(e) =>
-              this.setState({ set_num: parseInt(e.target.value) })
+            <Select
+              onChange={(e: React.ChangeEvent<{ value: string|unknown }>) =>
+              this.setState({ set_num: parseInt(typeof(e.target.value) === "string" ? e.target.value : "0") })
             }
             defaultValue=""
           >
             {this.state.pref_ja_arry?.map((d) => (
-              <option value={d.value}>{d.label}</option>
+              <MenuItem value={d.value}>{d.label}</MenuItem>
             )) || ""}
           </Select>
 
