@@ -1,5 +1,13 @@
 import React,{Component} from 'react';
 import WeatherIcon from './weather';
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+
 
 type Props={
     Min_Temp : number|undefined;
@@ -29,30 +37,41 @@ class NowInformation extends Component<Props> {
     }
 
     render(){
-        return(
-            <div>
+        return (
+          <div>
             <h2>現在の情報</h2>
-            <tr>
-                <th></th>
-                <td>最低気温</td>
-                <td>最高気温</td>
-            </tr>
-            <tr>
-                <th>気温</th>
-                <td>{this.strInfo(this.props.Min_Temp,"℃")}</td>
-                <td>{this.strInfo(this.props.Max_Temp,"℃")}</td>
-            </tr>
-            <tr>
-                <th>雨量(1h)</th>
-                <td colSpan={2}><WeatherIcon rain={this.props.precip_1h}/></td>
-            </tr>
-            <tr>
-                <th>最大瞬間風速(1day)</th>
-                <td colSpan={2}>{this.strInfo(this.props.wind,"m/s")}</td>
-            </tr>
-            </div>
-
-        )
+            <TableContainer component={Paper}>
+              <Table>
+                <TableRow>
+                  <TableCell></TableCell>
+                  <TableCell>最低気温</TableCell>
+                  <TableCell>最高気温</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>気温</TableCell>
+                  <TableCell>
+                    {this.strInfo(this.props.Min_Temp, "℃")}
+                  </TableCell>
+                  <TableCell>
+                    {this.strInfo(this.props.Max_Temp, "℃")}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>雨量(1h)</TableCell>
+                  <TableCell colSpan={2}>
+                    <WeatherIcon rain={this.props.precip_1h} />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>最大瞬間風速(1day)</TableCell>
+                  <TableCell colSpan={2}>
+                    {this.strInfo(this.props.wind, "m/s")}
+                  </TableCell>
+                </TableRow>
+              </Table>
+            </TableContainer>
+          </div>
+        );
     }
 }
 

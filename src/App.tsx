@@ -10,8 +10,6 @@ import Grid from '@material-ui/core/Grid';
 import Fade from "@material-ui/core/Fade";
 
 
-
-
 type State = {
   InputState:number;
   wind: number|undefined;
@@ -110,7 +108,7 @@ class App extends React.Component<{}, State> {
         <tr>
           <td>観測点</td>
           <td>
-          <select
+          <Select
             onChange={(e) =>
               this.setState({ set_num: parseInt(e.target.value) })
             }
@@ -119,7 +117,7 @@ class App extends React.Component<{}, State> {
             {this.state.pref_ja_arry?.map((d) => (
               <option value={d.value}>{d.label}</option>
             )) || ""}
-          </select>
+          </Select>
 
               </td>
           </tr>
@@ -138,22 +136,26 @@ class App extends React.Component<{}, State> {
 
       return (
         <div>
-          <NowInformation 
-            Min_Temp={this.state.Min_Temp} 
-            Max_Temp={this.state.Max_Temp} 
-            precip_1h={this.state.precip_1h} 
-            wind={this.state.wind} 
-          />
-  
-          <Point 
-            pref_ja={this.state.pref_ja}
-            stn_name_ja={this.state.stn_name_ja}
-            address={this.state.address}
-          />
-  
-      </div>
-  
-      )
+            <Grid>
+              <NowInformation
+                Min_Temp={this.state.Min_Temp}
+                Max_Temp={this.state.Max_Temp}
+                precip_1h={this.state.precip_1h}
+                wind={this.state.wind}
+              />
+            </Grid>
+
+            <div className="margin10">
+              <Grid>
+                <Point
+                  pref_ja={this.state.pref_ja}
+                  stn_name_ja={this.state.stn_name_ja}
+                  address={this.state.address}
+                />
+              </Grid>
+            </div>
+        </div>
+      );
   
     }else{
       return (
