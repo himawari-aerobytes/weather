@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Fade from "@material-ui/core/Fade";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Prefecture from "./Prefectute";
 
 
 type State = {
@@ -170,6 +171,7 @@ class App extends React.Component<{}, State> {
   render() {
     return (
       <div className="App">
+        <Prefecture />
           <Grid container spacing={3}>
             <Grid item xs={12}>
           <Comments arry={inputcomments} state={this.state.InputState} />

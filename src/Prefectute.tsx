@@ -1,9 +1,64 @@
 import React from "react";
+import Grid from "@material-ui/core/Grid";
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-class Prefecturte extends React.Component { 
+type Props = {
+
+};
+
+class Prefecturte extends React.Component<Props> { 
     render(){
-        return(<p></p>)
+        return (
+          <Grid container spacing={3}>
+            <Grid item xs={3}>
+              <h2>北海道地方</h2>
+              {Hokkaido.map((d) => (
+                <button type="button" value={d.value}>{d.value}</button>
+              ))}
+            </Grid>
+            <Grid item xs={3}>
+              <h2>東北地方</h2>
+              {Tohoku.map((d) => (
+                <p>{d.value}</p>
+              ))}
+            </Grid>
+            <Grid item xs={3}>
+              <h2>関東</h2>
+              {Kanto.map((d) => (
+                <p>{d.value}</p>
+              ))}
+            </Grid>
+            <Grid item xs={3}>
+              <h2>中部地方</h2>
+              {Chubu.map((d) => (
+                <p>{d.value}</p>
+              ))}
+            </Grid>
+            <Grid item xs={3}>
+              <h2>近畿地方</h2>
+              {Kinki.map((d) => (
+                <p>{d.value}</p>
+              ))}
+            </Grid>
+            <Grid item xs={3}>
+              <h2>中国地方</h2>
+              {Chugoku.map((d) => (
+                <p>{d.value}</p>
+              ))}
+            </Grid>
+            <Grid item xs={3}>
+              <h2>四国地方</h2>
+              {Shikoku.map((d) => (
+                <p>{d.value}</p>
+              ))}
+            </Grid>
+            <Grid item xs={3}>
+              <h2>九州地方</h2>
+              {Kyushu.map((d) => (
+                <p>{d.value}</p>
+              ))}
+            </Grid>
+          </Grid>
+        );
     }
 }
 
