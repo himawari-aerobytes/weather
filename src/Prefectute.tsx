@@ -1,62 +1,73 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
+import { Typography } from "@material-ui/core";
+import "./Prefecture.css";
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 type Props = {
-
+  onChange: any;
+  
 };
 
-class Prefecturte extends React.Component<Props> { 
+type state = {
+  InPref: string;
+  
+}
+
+class Prefecturte extends React.Component<Props,state> { 
+  constructor(props:any) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this)
+    this.state = {
+      InPref: "東京",
+      
+    };
+  }
+
+  renderBranch(branches: Array<{ [key: string]: string}>,name:string) {
+    const obj = branches.map((d) => (
+     
+      <Button variant="outlined" className="" type="button" onClick={() => this.handleChange(d.value)} value={d.value}>{d.value}</Button>
+    ));
+
+    return (
+      <Grid item xs={3}>
+        <h2>{name}地方</h2>
+        {obj}
+      </Grid>
+  
+
+
+
+    );
+    
+  }
+  handleChange(e:string) {
+    this.props.onChange(e);
+  }
+
     render(){
         return (
           <Grid container spacing={3}>
-            <Grid item xs={3}>
-              <h2>北海道地方</h2>
-              {Hokkaido.map((d) => (
-                <button type="button" value={d.value}>{d.value}</button>
-              ))}
-            </Grid>
-            <Grid item xs={3}>
-              <h2>東北地方</h2>
-              {Tohoku.map((d) => (
-                <p>{d.value}</p>
-              ))}
-            </Grid>
-            <Grid item xs={3}>
-              <h2>関東</h2>
-              {Kanto.map((d) => (
-                <p>{d.value}</p>
-              ))}
-            </Grid>
-            <Grid item xs={3}>
-              <h2>中部地方</h2>
-              {Chubu.map((d) => (
-                <p>{d.value}</p>
-              ))}
-            </Grid>
-            <Grid item xs={3}>
-              <h2>近畿地方</h2>
-              {Kinki.map((d) => (
-                <p>{d.value}</p>
-              ))}
-            </Grid>
-            <Grid item xs={3}>
-              <h2>中国地方</h2>
-              {Chugoku.map((d) => (
-                <p>{d.value}</p>
-              ))}
-            </Grid>
-            <Grid item xs={3}>
-              <h2>四国地方</h2>
-              {Shikoku.map((d) => (
-                <p>{d.value}</p>
-              ))}
-            </Grid>
-            <Grid item xs={3}>
-              <h2>九州地方</h2>
-              {Kyushu.map((d) => (
-                <p>{d.value}</p>
-              ))}
-            </Grid>
+
+            {this.renderBranch(Hokkaido,"北海道")}
+          
+            {this.renderBranch(Tohoku,"東北")}
+          
+            {this.renderBranch(Kanto,"関東")}
+          
+            {this.renderBranch(Chubu,"中部")}
+            
+            {this.renderBranch(Kinki,"近畿")}
+         
+            {this.renderBranch(Chugoku,"中国")}
+         
+            {this.renderBranch(Shikoku,"四国")}
+            
+            {this.renderBranch(Kyushu,"九州")}
+    
+ 
           </Grid>
         );
     }

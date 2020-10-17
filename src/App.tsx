@@ -34,7 +34,6 @@ type State = {
 class App extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
-
     this.state = {
       InputState:0,
       wind: undefined,
@@ -52,6 +51,10 @@ class App extends React.Component<{}, State> {
       Update:"",
     };
     this.getAPI = this.getAPI.bind(this);
+    this.updateState = this.updateState.bind(this);
+  }
+   updateState(pref:string){
+     this.setState({ InPref: pref });
   }
 
 
@@ -168,11 +171,11 @@ class App extends React.Component<{}, State> {
     }
   }
 
+
   render() {
     return (
       <div className="App">
-        <Prefecture />
-          <Grid container spacing={3}>
+        <Prefecture onChange={this.updateState} />
             <Grid item xs={12}>
           <Comments arry={inputcomments} state={this.state.InputState} />
           </Grid>
@@ -210,7 +213,6 @@ class App extends React.Component<{}, State> {
               {this.renderNowWeather(this.state.InputState)}
             </Fade>
           </Grid>
-         </Grid>
       </div>
     );
   }
