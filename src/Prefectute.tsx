@@ -32,7 +32,7 @@ class Prefecturte extends React.Component<Props,state> {
     ));
 
     return (
-      <Grid item xs={3}>
+      <Grid item xs={12} sm={4}>
         <h2>{name}地方</h2>
         {obj}
       </Grid>

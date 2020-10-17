@@ -175,26 +175,22 @@ class App extends React.Component<{}, State> {
   render() {
     return (
       <div className="App">
+        <Grid container spacing={2}>
         <Prefecture onChange={this.updateState} />
             <Grid item xs={12}>
           <Comments arry={inputcomments} state={this.state.InputState} />
           </Grid>
           <Grid item xs={12}>
-          <table>
+          <table className="space-50">
             <tr>
             <th>県名</th>
             <td>
               <input
                 type="text"
                 value={this.state.InPref}
-                onChange={(e) =>
-                  this.setState({ InPref: e.target.value})
-                }
+  
           />
             </td>
-
-
-
             </tr>
             {this.renderInputPoint(this.state.InputState)}
             
@@ -206,12 +202,15 @@ class App extends React.Component<{}, State> {
               </td>
 
             </tr>
-          </table>
+            </table>
+            
           </Grid>
+
           <Grid item xs={12}>
             <Fade in={this.state.InputState === 2 ? true:false}>
               {this.renderNowWeather(this.state.InputState)}
             </Fade>
+          </Grid>
           </Grid>
       </div>
     );
