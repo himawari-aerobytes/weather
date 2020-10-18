@@ -121,7 +121,7 @@ class App extends React.Component<{}, State> {
     }
       
     else
-      return  <Button onClick={()=>this.setState({isPrefecture:true})}>地方選択へ戻る</Button>
+      return <Button onClick={() => { this.setState({ isPrefecture: true,InputState:0 })  }}>地方選択へ戻る</Button>
     
   }
   renderInputPoint(State:number){
