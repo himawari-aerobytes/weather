@@ -27,7 +27,9 @@ type State = {
   Max_Temp:number|undefined;
   Min_Temp:number|undefined;
   Update:string|null;
-  address : string;
+  address: string;
+  isPrefecture: boolean;
+  isNowWeather: boolean;
 
 };
 
@@ -48,13 +50,16 @@ class App extends React.Component<{}, State> {
       Max_Temp:undefined,
       Min_Temp:undefined,
       address:"",
-      Update:"",
+      Update: "",
+      isPrefecture: true,
+      isNowWeather:false,
     };
     this.getAPI = this.getAPI.bind(this);
     this.updateState = this.updateState.bind(this);
   }
    updateState(pref:string){
-     this.setState({ InPref: pref });
+     this.setState({ InPref: pref,isPrefecture:!this.state.isPrefecture });
+
   }
 
 
@@ -98,7 +103,7 @@ class App extends React.Component<{}, State> {
 
         if(this.state.arraylength <= 0){
           this.setState({InputState:3})
-          throw new Error ("正しい県名ですか？");
+          throw new Error ("Internal Error 該当する件名がありません。");
         }
       })
       .catch((e) => {
@@ -107,8 +112,18 @@ class App extends React.Component<{}, State> {
       })
       .finally(()=>exit);
   }
+  renderPrefecture() {
+    if (this.state.isPrefecture) {
+      return (<Prefecture onChange={this.updateState} />)
+
+    }
+      
+    else
+      return  <Button onClick={()=>this.setState({isPrefecture:true})}>地方選択へ戻る</Button>
+    
+  }
   renderInputPoint(State:number){
-    if(State >= 1){
+    if(State >= 1 && !this.state.isPrefecture ){
 
       return (
         <tr>
@@ -138,7 +153,7 @@ class App extends React.Component<{}, State> {
   }
 
   renderNowWeather(State:number){
-    if(State === 2 ){
+    if(State === 2 && !this.state.isPrefecture){
 
       return (
         <div>
@@ -176,12 +191,15 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <Grid container spacing={2}>
-        <Prefecture onChange={this.updateState} />
+            {this.renderPrefecture()}
+
+          {/*<Prefecture onChange={this.updateState} />*/}
+         
             <Grid item xs={12}>
           <Comments arry={inputcomments} state={this.state.InputState} />
           </Grid>
           <Grid item xs={12}>
-          <table className="space-50">
+          <table>
             <tr>
             <th>県名</th>
             <td>
