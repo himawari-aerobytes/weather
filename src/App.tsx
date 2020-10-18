@@ -30,6 +30,7 @@ type State = {
   address: string;
   isPrefecture: boolean;
   isNowWeather: boolean;
+  isPoint: boolean;
 
 };
 
@@ -52,7 +53,8 @@ class App extends React.Component<{}, State> {
       address:"",
       Update: "",
       isPrefecture: true,
-      isNowWeather:false,
+      isNowWeather: false,
+      isPoint : false,
     };
     this.getAPI = this.getAPI.bind(this);
     this.updateState = this.updateState.bind(this);
