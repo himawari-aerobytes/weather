@@ -89,7 +89,7 @@ class App extends React.Component<{}, State> {
         }
 
         this.setState({
-          InputState:this.state.InputState === 0 ? 1: this.state.InputState === 1 ? 2 : 2,
+          InputState:1,
           pref_ja: data[i]?.pref_ja ||"",
           precip_1h: data[i]?.preall?.precip_1h !== undefined ?  data[i].preall.precip_1h : undefined,
           wind: data[i]?.max_wind?.max_wind_daily
@@ -132,8 +132,9 @@ class App extends React.Component<{}, State> {
           <td>観測点</td>
           <td>
             <Select
-              onChange={(e: React.ChangeEvent<{ value: string|unknown }>) =>
-              this.setState({ set_num: parseInt(typeof(e.target.value) === "string" ? e.target.value : "0") })
+              onChange={(e: React.ChangeEvent<{ value: string|unknown }>) =>{
+                this.setState({ set_num: parseInt(typeof (e.target.value) === "string" ? e.target.value : "0") })
+              }
             }
             defaultValue=""
           >
@@ -155,7 +156,7 @@ class App extends React.Component<{}, State> {
   }
 
   renderNowWeather(State:number){
-    if(State === 2 && !this.state.isPrefecture){
+    if(this.state.InputState === 1 || this.state.InputState===2){
 
       return (
         <div>
@@ -216,9 +217,9 @@ class App extends React.Component<{}, State> {
             
             <tr>
               <td colSpan={2} align="center" >
-              <Button variant="contained" color="primary" onClick={() => this.getAPI(this.state.set_num)}>
-            情報を取得
-          </Button>
+                  {!this.state.isPrefecture?<Button variant="contained" color="primary" onClick={() => this.getAPI(this.state.set_num)}>
+                    情報を取得
+          </Button>:null}
               </td>
 
             </tr>
@@ -227,7 +228,7 @@ class App extends React.Component<{}, State> {
           </Grid>
 
           <Grid item xs={12}>
-            <Fade in={this.state.InputState === 2 ? true:false}>
+            <Fade in={this.state.InputState === 1 ? true:false}>
               {this.renderNowWeather(this.state.InputState)}
             </Fade>
           </Grid>
