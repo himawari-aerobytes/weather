@@ -127,7 +127,7 @@ class App extends React.Component<{}, State> {
   }
 
   renderPrefecture() {
-    if (this.state.isPrefecture) {
+    if (this.state.isPrefecture) {//
       return (<Prefecture onChange={this.updateState} />)
 
     }
