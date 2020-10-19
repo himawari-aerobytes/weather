@@ -133,7 +133,7 @@ class App extends React.Component<{}, State> {
     }
       
     else
-      return <Button onClick={() => { this.setState({ isPrefecture: true,InputState:0 })  }}>地方選択へ戻る</Button>
+      return <Button variant="outlined" onClick={() => { this.setState({ isPrefecture: true,InputState:0 })  }}>地方選択へ戻る</Button>
     
   }
   handleOnChangePoint(e:React.ChangeEvent<{
@@ -146,7 +146,7 @@ class App extends React.Component<{}, State> {
 
     console.log("handle:"+this.state.set_num+this.state.stn_name_ja);
 
-    this.setAPIData(this.state.set_num);
+    this.setAPIData(num);
 
   }
 
