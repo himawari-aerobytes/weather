@@ -15,7 +15,7 @@ ReactDOM.render(
         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
       />
       <div className="container">
-        <h1>Weather Information</h1>
+        <h1 className="Title">Weather Information</h1>
         <App />
       </div>
     </Container>

@@ -30,7 +30,7 @@ type State = {
   address: string;
   isPrefecture: boolean;
   isNowWeather: boolean;
-  isPoint: boolean;
+  isGetButton: boolean;
 
 };
 
@@ -56,7 +56,7 @@ class App extends React.Component<{}, State> {
       Update: "",
       isPrefecture: true,
       isNowWeather: false,
-      isPoint : false,
+      isGetButton : true,
     };
     this.getAPI = this.getAPI.bind(this);
     this.updateState = this.updateState.bind(this);
@@ -97,7 +97,7 @@ class App extends React.Component<{}, State> {
           pref_ja_arry: str,
           arraylength:str.length-1,
           InputState:1,
-          isPoint:true,
+          isGetButton:false,
         });
 
         if(this.state.arraylength <= 0){
@@ -116,7 +116,7 @@ class App extends React.Component<{}, State> {
     if(Data!==undefined){
       this.setState({
         pref_ja:Data[num]?.pref_ja || "",
-        precip_1h:Data[num]?.preall?.precip_1h||undefined,
+        precip_1h:Data[num]?.preall?.precip_1h!==null? Data[num]?.preall?.precip_1h:null,
         wind: Data[num]?.max_wind?.max_wind_daily||null,
         stn_name_ja: Data[num]?.stn_name_ja||"--",
         Max_Temp:Data[num]?.max_temp?.temp_daily_max || null,
@@ -133,7 +133,7 @@ class App extends React.Component<{}, State> {
     }
       
     else
-      return <Button variant="outlined" onClick={() => { this.setState({ isPrefecture: true,InputState:0 })  }}>地方選択へ戻る</Button>
+      return <Button variant="outlined" onClick={() => { this.setState({ isPrefecture: true, InputState: 0, isGetButton:true,isNowWeather:false })  }}>地方選択へ戻る</Button>
     
   }
   handleOnChangePoint(e:React.ChangeEvent<{
@@ -142,7 +142,7 @@ class App extends React.Component<{}, State> {
 }>){
 
     const num = typeof(e.target.value) !== "string" ? 0 : parseInt(e.target.value);
-    this.setState({set_num:num});
+    this.setState({set_num:num,isNowWeather:true});
 
     console.log("handle:"+this.state.set_num+this.state.stn_name_ja);
 
@@ -179,12 +179,11 @@ class App extends React.Component<{}, State> {
   }
 
   renderNowWeather(State:number){
-    if(this.state.InputState === 1 || this.state.InputState===2){
+    if((this.state.InputState === 1 || this.state.InputState===2)&&this.state.isNowWeather){
 
       return (
         <div>
-            <Grid item xs={12}>
-            <Fade in={this.state.InputState === 1 ? true:false}>
+
  
               <NowInformation
                 Min_Temp={this.state.Min_Temp}
@@ -192,19 +191,11 @@ class App extends React.Component<{}, State> {
                 precip_1h={this.state.precip_1h}
                 wind={this.state.wind}
               />
-               </Fade>
-            </Grid>
-           
-
-            <div className="margin10">
-              <Grid item xs={12}> 
                 <Point
                   pref_ja={this.state.pref_ja}
                   stn_name_ja={this.state.stn_name_ja}
                   address={this.state.address}
                 />
-              </Grid>
-            </div>
         </div>
       );
   
@@ -220,31 +211,30 @@ class App extends React.Component<{}, State> {
   render() {
     return (
       <div className="App">
-        <Grid container spacing={2}>
+                <Grid container spacing={3}>
+        <Grid item xs={12}>
+            <Comments arry={inputcomments} state={this.state.InputState} />
+          </Grid>
+
             {this.renderPrefecture()}
 
-          {/*<Prefecture onChange={this.updateState} />*/}
-
-            <Grid item xs={12}>
-          <Comments arry={inputcomments} state={this.state.InputState} />
-          </Grid>
+   
           <Grid item xs={12}>
-          <table>
-            <tr>
-            <th>県名</th>
-            <td>
-              <input
-                type="text"
-                value={this.state.InPref}
+            <table>
+              <tr>
+                <th>県名</th>
+              <td>
+                <input
+                  type="text"
+                  value={this.state.InPref}
   
-          />
-            </td>
+                />
+              </td>
             </tr>
             {this.renderInputPoint(this.state.InputState)}
-            
             <tr>
               <td colSpan={2} align="center" >
-                  {!this.state.isPrefecture?<Button variant="contained" color="primary" onClick={() => this.getAPI()}>
+                  {!this.state.isPrefecture&&this.state.isGetButton?<Button variant="contained" color="primary" onClick={() => this.getAPI()}>
                     情報を取得
           </Button>:null}
               </td>
@@ -253,7 +243,11 @@ class App extends React.Component<{}, State> {
             </table>
             
           </Grid>
-              {this.renderNowWeather(this.state.set_num)}
+          <Grid item xs={12}>
+            <Fade in={this.state.InputState === 1 ? true:false}>
+            {this.renderNowWeather(this.state.set_num)}
+            </Fade>
+            </Grid>
           </Grid>
       </div>
     );
