@@ -12,14 +12,14 @@ class Point extends React.Component<Props>{
             <div>
                 <table>
                     <tr>
-                    <th align="left">県名(振興局)</th>
-                    <th align="left">観測所名</th>
-                    <th align="left">観測所住所</th>
+                        <th align="left">県名(振興局)</th>
+                        <th align="left">観測所名</th>
+                        <th align="left">観測所住所</th>
                     </tr>
                     <tr>
-                    <td>{this.props.pref_ja}</td>
-                    <td>{this.props.stn_name_ja}</td>
-                    <td>{this.props.address}</td>
+                        <td>{this.props.pref_ja}</td>
+                        <td>{this.props.stn_name_ja}</td>
+                        <td>{this.props.address}</td>
                     </tr>
                 </table>
             </div>

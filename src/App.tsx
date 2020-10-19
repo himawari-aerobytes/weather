@@ -34,6 +34,8 @@ type State = {
 
 };
 
+let Data:any =[];
+
 class App extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
@@ -59,61 +61,71 @@ class App extends React.Component<{}, State> {
     this.getAPI = this.getAPI.bind(this);
     this.updateState = this.updateState.bind(this);
   }
+
    updateState(pref:string){
      this.setState({ InPref: pref,isPrefecture:!this.state.isPrefecture });
 
   }
 
 
-  getAPI(i: number, address: string = "", pref_ja: string = "石狩"): void {
+  getAPI(i: number=0): void {
+
+    Data.length = 0;
+
     axios
       .get("https://jjwd.info/api/v2/stations/search", {
         params: {
-          address: address,
           pref_ja: this.state.InPref,
         },
       })
       .then((response) => {
-        const data = response?.data?.stations||[{}];
-
-        console.log(data);
-        let str=[{}];
-        let j = 0;
-        data.forEach((element: any) => {
-          str[j]={ value: j.toString(), label: element.stn_name_ja };
-          j++;
-        });
-        
-        if(data===undefined){
+        Data = response?.data?.stations||undefined;
+        if(Data===undefined){
           throw new Error("Cannot Get");
         }
 
+        console.log(Data);
+
+        let str=[{}];
+        let j = 0;
+        Data.forEach((element: any) => {
+          str[j]={ value: j.toString(), label: element.stn_name_ja };
+          j++;
+        });
+
         this.setState({
-          InputState:1,
-          pref_ja: data[i]?.pref_ja ||"",
-          precip_1h: data[i]?.preall?.precip_1h !== undefined ?  data[i].preall.precip_1h : undefined,
-          wind: data[i]?.max_wind?.max_wind_daily
-            ? data[i]?.max_wind?.max_wind_daily 
-            : null,
-          stn_name_ja: data[i]?.stn_name_ja || "--",
-          arraylength: data.length - 1,
           pref_ja_arry: str,
-          Max_Temp:data[i]?.max_temp?.temp_daily_max ? data[i]?.max_temp?.temp_daily_max: null,
-          Min_Temp:data[i]?.min_temp?.temp_daily_min ? data[i]?.min_temp?.temp_daily_min : null,
-          address : data[i]?.address ? data[i]?.address : "",
+          arraylength:str.length-1,
+          InputState:1,
+          isPoint:true,
         });
 
         if(this.state.arraylength <= 0){
           this.setState({InputState:3})
-          throw new Error ("Internal Error 該当する件名がありません。");
+          throw new Error ("Internal Error　県の情報を取得できませんでした。");
         }
       })
       .catch((e) => {
         alert("debugger\n"+e);
-        alert("データが取得できませんでした");
+        alert("エラーです");
       })
       .finally(()=>exit);
   }
+
+  setAPIData(num:number){
+    if(Data!==undefined){
+      this.setState({
+        pref_ja:Data[num]?.pref_ja || "",
+        precip_1h:Data[num]?.preall?.precip_1h||undefined,
+        wind: Data[num]?.max_wind?.max_wind_daily||null,
+        stn_name_ja: Data[num]?.stn_name_ja||"--",
+        Max_Temp:Data[num]?.max_temp?.temp_daily_max || null,
+        Min_Temp:Data[num]?.min_temp?.temp_daily_min || null,
+        address : Data[num]?.address || "",
+      })
+    }
+  }
+
   renderPrefecture() {
     if (this.state.isPrefecture) {
       return (<Prefecture onChange={this.updateState} />)
@@ -124,6 +136,20 @@ class App extends React.Component<{}, State> {
       return <Button onClick={() => { this.setState({ isPrefecture: true,InputState:0 })  }}>地方選択へ戻る</Button>
     
   }
+  handleOnChangePoint(e:React.ChangeEvent<{
+    name?: string | undefined;
+    value: unknown;
+}>){
+
+    const num = typeof(e.target.value) !== "string" ? 0 : parseInt(e.target.value);
+    this.setState({set_num:num});
+
+    console.log("handle:"+this.state.set_num+this.state.stn_name_ja);
+
+    this.setAPIData(this.state.set_num);
+
+  }
+
   renderInputPoint(State:number){
     if(State >= 1 && !this.state.isPrefecture ){
 
@@ -132,10 +158,7 @@ class App extends React.Component<{}, State> {
           <td>観測点</td>
           <td>
             <Select
-              onChange={(e: React.ChangeEvent<{ value: string|unknown }>) =>{
-                this.setState({ set_num: parseInt(typeof (e.target.value) === "string" ? e.target.value : "0") })
-              }
-            }
+              onChange={(e)=>this.handleOnChangePoint(e)}
             defaultValue=""
           >
             {this.state.pref_ja_arry?.map((d) => (
@@ -160,17 +183,21 @@ class App extends React.Component<{}, State> {
 
       return (
         <div>
-            <Grid>
+            <Grid item xs={12}>
+            <Fade in={this.state.InputState === 1 ? true:false}>
+ 
               <NowInformation
                 Min_Temp={this.state.Min_Temp}
                 Max_Temp={this.state.Max_Temp}
                 precip_1h={this.state.precip_1h}
                 wind={this.state.wind}
               />
+               </Fade>
             </Grid>
+           
 
             <div className="margin10">
-              <Grid>
+              <Grid item xs={12}> 
                 <Point
                   pref_ja={this.state.pref_ja}
                   stn_name_ja={this.state.stn_name_ja}
@@ -197,7 +224,7 @@ class App extends React.Component<{}, State> {
             {this.renderPrefecture()}
 
           {/*<Prefecture onChange={this.updateState} />*/}
-         
+
             <Grid item xs={12}>
           <Comments arry={inputcomments} state={this.state.InputState} />
           </Grid>
@@ -217,7 +244,7 @@ class App extends React.Component<{}, State> {
             
             <tr>
               <td colSpan={2} align="center" >
-                  {!this.state.isPrefecture?<Button variant="contained" color="primary" onClick={() => this.getAPI(this.state.set_num)}>
+                  {!this.state.isPrefecture?<Button variant="contained" color="primary" onClick={() => this.getAPI()}>
                     情報を取得
           </Button>:null}
               </td>
@@ -226,12 +253,7 @@ class App extends React.Component<{}, State> {
             </table>
             
           </Grid>
-
-          <Grid item xs={12}>
-            <Fade in={this.state.InputState === 1 ? true:false}>
-              {this.renderNowWeather(this.state.InputState)}
-            </Fade>
-          </Grid>
+              {this.renderNowWeather(this.state.set_num)}
           </Grid>
       </div>
     );
