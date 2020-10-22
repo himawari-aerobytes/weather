@@ -16,7 +16,6 @@ import Prefecture from "./Prefectute";
 type State = {
   InputState:number;
   wind: number|undefined;
-  updatedAt: string;
   precip_1h: number|undefined;
   pref_ja: string;
   pref_ja_arry: Array<{ [key: string]: string }> | null;
@@ -31,6 +30,7 @@ type State = {
   isPrefecture: boolean;
   isNowWeather: boolean;
   isGetButton: boolean;
+  updateAt: string | undefined;
 
 };
 
@@ -42,7 +42,6 @@ class App extends React.Component<{}, State> {
     this.state = {
       InputState:0,
       wind: undefined,
-      updatedAt: "",
       precip_1h: undefined,
       pref_ja: "",
       pref_ja_arry: [{}],
@@ -56,7 +55,8 @@ class App extends React.Component<{}, State> {
       Update: "",
       isPrefecture: true,
       isNowWeather: false,
-      isGetButton : true,
+      isGetButton: true,
+      updateAt:"",
     };
     this.getAPI = this.getAPI.bind(this);
     this.updateState = this.updateState.bind(this);
@@ -121,7 +121,8 @@ class App extends React.Component<{}, State> {
         stn_name_ja: Data[num]?.stn_name_ja||"--",
         Max_Temp:Data[num]?.max_temp?.temp_daily_max || null,
         Min_Temp:Data[num]?.min_temp?.temp_daily_min || null,
-        address : Data[num]?.address || "",
+        address: Data[num]?.address || "",
+        updateAt:Data[num]?.updatedAt||"",
       })
     }
   }
@@ -183,19 +184,16 @@ class App extends React.Component<{}, State> {
 
       return (
         <div>
-
- 
               <NowInformation
                 Min_Temp={this.state.Min_Temp}
                 Max_Temp={this.state.Max_Temp}
                 precip_1h={this.state.precip_1h}
                 wind={this.state.wind}
+                pref_ja={this.state.pref_ja}
+                stn_name_ja={this.state.stn_name_ja}
+            address={this.state.address}
+            updateAt={this.state.updateAt}
               />
-                <Point
-                  pref_ja={this.state.pref_ja}
-                  stn_name_ja={this.state.stn_name_ja}
-                  address={this.state.address}
-                />
         </div>
       );
   
@@ -207,12 +205,11 @@ class App extends React.Component<{}, State> {
     }
   }
 
-
   render() {
     return (
       <div className="App">
-                <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
             <Comments arry={inputcomments} state={this.state.InputState} />
           </Grid>
 
@@ -223,17 +220,13 @@ class App extends React.Component<{}, State> {
             <table>
               <tr>
                 <th>県名</th>
-              <td>
-                <input
-                  type="text"
-                  value={this.state.InPref}
-  
-                />
-              </td>
-            </tr>
-            {this.renderInputPoint(this.state.InputState)}
-            <tr>
-              <td colSpan={2} align="center" >
+                <td>
+                  <input type="text" value={this.state.InPref} />
+                </td>
+              </tr>
+              {this.renderInputPoint(this.state.InputState)}
+              <tr>
+                <td colSpan={2} align="center" >
                   {!this.state.isPrefecture&&this.state.isGetButton?<Button variant="contained" color="primary" onClick={() => this.getAPI()}>
                     情報を取得
           </Button>:null}

@@ -37,8 +37,6 @@ class Prefecturte extends React.Component<Props,state> {
         <h2>{name}地方</h2>
         {obj}
       </Grid>
-  
-
 
 
     );
