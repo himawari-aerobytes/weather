@@ -64,9 +64,7 @@ class App extends React.Component<{}, State> {
 
    updateState(pref:string){
      this.setState({ InPref: pref,isPrefecture:!this.state.isPrefecture });
-
   }
-
 
   getAPI(i: number=0): void {
 
@@ -248,7 +246,7 @@ class App extends React.Component<{}, State> {
 }
 
 const inputcomments = [
-  "1.最初に県名を入力してください",
+  "1.最初に県名を選択してください",
   "2.観測所名を指定してください",
   "",
   "正しい県名を入れてください"
