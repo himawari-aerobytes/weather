@@ -37,7 +37,7 @@ class Prefecturte extends React.Component<Props, state> {
 
     return (
       <Grid item xs={12} sm={4}>
-        <h2>{name}地方</h2>
+        <h2 className="AreaName">{name}地方</h2>
         {obj}
       </Grid>
     );

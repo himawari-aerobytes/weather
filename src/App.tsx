@@ -127,12 +127,16 @@ class App extends React.Component<{}, State> {
 
   renderPrefecture() {
     if (this.state.isPrefecture) {
+      {
+        window.scrollTo(0, 0);
+      }
       //
       return <Prefecture onChange={this.updateState} />;
     } else
       return (
         <Button
           variant="outlined"
+          color="secondary"
           onClick={() => {
             this.setState({
               isPrefecture: true,
@@ -213,6 +217,11 @@ class App extends React.Component<{}, State> {
           <Grid item xs={12}>
             <Comments arry={inputcomments} state={this.state.InputState} />
           </Grid>
+          <Grid item xs={12}>
+            <Fade in={this.state.InputState === 1 ? true : false}>
+              {this.renderNowWeather(this.state.set_num)}
+            </Fade>
+          </Grid>
 
           {this.renderPrefecture()}
 
@@ -237,9 +246,9 @@ class App extends React.Component<{}, State> {
             </table>
           </Grid>
           <Grid item xs={12}>
-            <Fade in={this.state.InputState === 1 ? true : false}>
-              {this.renderNowWeather(this.state.set_num)}
-            </Fade>
+            <footer>
+              このサイトのデータは<a href="https://jjwd.info/">jjwd.info</a>のAPIを利用しています。
+            </footer>
           </Grid>
         </Grid>
       </div>

@@ -19,11 +19,6 @@ ReactDOM.render(
         </div>
       </Container>
     </div>
-    <footer>
-      <p>
-        このサイトのデータは<a href="https://jjwd.info/">jjwd.info</a>のAPIを利用しています。
-      </p>
-    </footer>
   </React.StrictMode>,
   document.getElementById('root')
 );

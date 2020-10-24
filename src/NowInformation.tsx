@@ -63,7 +63,6 @@ class NowInformation extends Component<Props> {
             {this.makePoitStr(this.props?.updateAt || new Date('1980/1/1'))}更新
           </p>
         </div>
-
         <TableContainer component={Paper}>
           <Table>
             <TableRow>
@@ -99,6 +98,7 @@ class NowInformation extends Component<Props> {
             </TableRow>
           </Table>
         </TableContainer>
+        {window.scrollTo(0, 150)}
       </div>
     );
   }
