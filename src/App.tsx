@@ -11,7 +11,7 @@ import Fade from '@material-ui/core/Fade';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Prefecture from './Prefectute';
-
+import ElseArea from './elseArea';
 type State = {
   InputState: number;
   wind: number | undefined;
@@ -29,7 +29,7 @@ type State = {
   isPrefecture: boolean;
   isNowWeather: boolean;
   isGetButton: boolean;
-  updateAt: string | undefined;
+  updateAt: Date | undefined;
 };
 
 let Data: any = [];
@@ -54,10 +54,11 @@ class App extends React.Component<{}, State> {
       isPrefecture: true,
       isNowWeather: false,
       isGetButton: true,
-      updateAt: '',
+      updateAt: undefined,
     };
     this.getAPI = this.getAPI.bind(this);
     this.updateState = this.updateState.bind(this);
+    this.setAPIData = this.setAPIData.bind(this);
   }
 
   updateState(pref: string) {
@@ -117,8 +118,10 @@ class App extends React.Component<{}, State> {
         Max_Temp: Data[num]?.max_temp?.temp_daily_max || null,
         Min_Temp: Data[num]?.min_temp?.temp_daily_min || null,
         address: Data[num]?.address || '',
-        updateAt: Data[num]?.updatedAt || '',
+        updateAt: Data[num]?.preall?.updatedAt || '',
       });
+    } else {
+      throw new Error('Data is undefined');
     }
   }
 
@@ -189,6 +192,12 @@ class App extends React.Component<{}, State> {
             stn_name_ja={this.state.stn_name_ja}
             address={this.state.address}
             updateAt={this.state.updateAt}
+          />
+          <p>その他のエリア</p>
+          <ElseArea
+            pref_ja_arry={this.state.pref_ja_arry}
+            stn_name_ja={this.state.stn_name_ja}
+            onSelect={this.setAPIData}
           />
         </div>
       );

@@ -17,7 +17,7 @@ type Props = {
   pref_ja: string | undefined;
   stn_name_ja: string | undefined;
   address: string | undefined;
-  updateAt: string | undefined;
+  updateAt: Date | undefined;
 };
 const ta = 'a';
 
@@ -38,22 +38,32 @@ class NowInformation extends Component<Props> {
     return information;
   }
 
-  makePoitStr(a: string = '', b: string = '', update: string = ''): string {
-    const Format = new Date(update);
-    console.log(Format);
-    const year = Format.toLocaleString('ja');
-    const month = Format.getMonth() + 1;
-    const day = Format.getDate();
-    const hour = Format.getHours();
-    const minutes = Format.getMinutes();
+  makePoitStr(update: Date): string {
+    const date = new Date(update);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minutes = date.getMinutes();
     const showf = year + '/' + month + '/' + day + ' ' + hour + ':' + minutes;
-    return a + ' ' + b + ' ';
+    return showf;
   }
 
   render() {
     return (
       <div>
-        <h2>現在の情報</h2>
+        <div>
+          <div className="current_information">
+            <h2>現在の情報</h2>
+            <p>
+              {this.props.pref_ja} {this.props.stn_name_ja}
+            </p>
+          </div>
+          <p className="update_time">
+            {this.makePoitStr(this.props?.updateAt || new Date('1980/1/1'))}更新
+          </p>
+        </div>
+
         <TableContainer component={Paper}>
           <Table>
             <TableRow>
@@ -83,7 +93,8 @@ class NowInformation extends Component<Props> {
             <TableRow>
               <TableCell>観測地点</TableCell>
               <TableCell colSpan={2}>
-                {this.makePoitStr(this.props.pref_ja, this.props.address, this.props.updateAt)}
+                {this.props.pref_ja}
+                {this.props.address}
               </TableCell>
             </TableRow>
           </Table>

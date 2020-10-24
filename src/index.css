@@ -1,20 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo:wght@500&family=Noto+Sans+JP:wght@300;400&display=swap');
 body {
   margin: 0;
-  font-family: 'Exo', sans-serif;
-  font-family: 'Noto Sans JP', sans-serif;
-
-
+  font-family: sans-serif;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
-.Title{
-  color:#003399; 
+.Title {
+  color: #003399;
   border-bottom: dotted 1px;
+}
+.allContainer {
+  height: 1000px;
+}
+
+footer {
+  text-align: center;
 }
