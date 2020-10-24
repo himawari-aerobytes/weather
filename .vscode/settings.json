@@ -1,0 +1,6 @@
+{
+    "prettier.useTabs": true,
+    "prettier.singleQuote": true,
+    "prettier.packageManager": "yarn",
+    "prettier.configPath": "src/.prettierrc"
+}
