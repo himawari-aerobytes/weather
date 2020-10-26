@@ -38,13 +38,20 @@ class NowInformation extends Component<Props> {
     return information;
   }
 
+  time_full_display(N: number) {
+    let NtoStr = String(N);
+
+    return NtoStr.length === 1 ? 0 + NtoStr : NtoStr;
+  }
+
   makePoitStr(update: Date): string {
     const date = new Date(update);
     const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const hour = date.getHours();
-    const minutes = date.getMinutes();
+    const month = this.time_full_display(date.getMonth() + 1);
+    const day = this.time_full_display(date.getDate());
+    const hour = this.time_full_display(date.getHours());
+    const minutes = this.time_full_display(date.getMinutes());
+
     const showf = year + '/' + month + '/' + day + ' ' + hour + ':' + minutes;
     return showf;
   }
@@ -60,7 +67,7 @@ class NowInformation extends Component<Props> {
             </p>
           </div>
           <p className="update_time">
-            {this.makePoitStr(this.props?.updateAt || new Date('1980/1/1'))}更新
+            {this.makePoitStr(this.props?.updateAt || new Date('1999/1/1'))}更新
           </p>
         </div>
         <TableContainer component={Paper}>
