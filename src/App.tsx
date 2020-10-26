@@ -223,6 +223,14 @@ class App extends React.Component<{}, State> {
             </Fade>
           </Grid>
 
+          {() => {
+            if (this.state.InputState === 1) {
+              return window.scrollTo(0, 0);
+            } else {
+              return null;
+            }
+          }}
+
           {this.renderPrefecture()}
 
           <Grid item xs={12}>
