@@ -7,6 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import CloseIcon from '@material-ui/icons/Close';
 import './App.css';
 
 type Props = {
@@ -29,7 +30,12 @@ class NowInformation extends Component<Props> {
         information = <p></p>;
         break;
       case null:
-        information = <p className="silver">情報がありません</p>;
+        information = (
+          <p className="silver">
+            <CloseIcon fontSize="small" className="verticalBottom" />{' '}
+            <p className="verticalBase">情報がありません</p>
+          </p>
+        );
         break;
       default:
         information = <p>{num + Unit}</p>;

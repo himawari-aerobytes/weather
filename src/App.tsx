@@ -112,7 +112,7 @@ class App extends React.Component<{}, State> {
     if (Data !== undefined) {
       this.setState({
         pref_ja: Data[num]?.pref_ja || '',
-        precip_1h: Data[num]?.preall?.precip_1h !== null ? Data[num]?.preall?.precip_1h : null,
+        precip_1h: Data[num]?.preall?.precip_1h !== null ? Data[num]?.preall?.precip_1h : undefined,
         wind: Data[num]?.max_wind?.max_wind_daily || null,
         stn_name_ja: Data[num]?.stn_name_ja || '--',
         Max_Temp: Data[num]?.max_temp?.temp_daily_max || null,

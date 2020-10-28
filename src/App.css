@@ -25,3 +25,18 @@ body {
   font-size: 12px;
   font-size: 0.75rem;
 }
+
+._20to30 .verticalBottom {
+  padding-top: 10px;
+  display: inline;
+  vertical-align: bottom;
+}
+.inline {
+  display: inline;
+  color: red;
+  vertical-align: baseline;
+}
+.verticalBase {
+  vertical-align: top;
+  display: inline;
+}
