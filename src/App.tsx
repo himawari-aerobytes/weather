@@ -12,6 +12,8 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Prefecture from './Prefectute';
 import ElseArea from './elseArea';
+import HomeIcon from '@material-ui/icons/Home';
+
 type State = {
   InputState: number;
   wind: number | undefined;
@@ -146,6 +148,7 @@ class App extends React.Component<{}, State> {
             });
           }}
         >
+          <HomeIcon />
           地方選択へ戻る
         </Button>
       );
@@ -255,7 +258,8 @@ class App extends React.Component<{}, State> {
           </Grid>
           <Grid item xs={12}>
             <footer>
-              このサイトのデータは<a href="https://jjwd.info/">jjwd.info</a>のAPIを利用しています。
+              最新の気象データ（https://www.data.jma.go.jp/obd/stats/data/mdrr/）を基に jjwd.info
+              が加工したデータ を利用して本サイトを表示しております。
             </footer>
           </Grid>
         </Grid>
