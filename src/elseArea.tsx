@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import './elseArea.css';
 import Grid from '@material-ui/core/Grid';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Fade from '@material-ui/core/Fade';
 
 type Props = {
   pref_ja_arry: Array<{ [key: string]: string }> | null;
