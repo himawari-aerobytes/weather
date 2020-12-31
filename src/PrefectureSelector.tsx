@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Grid } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import Prefecture from './Prefectute';
 import HomeIcon from '@material-ui/icons/Home';
+import './App.css';
 
 type Props = {
   setState: any;
@@ -14,8 +15,9 @@ class PrefectureSelector extends React.Component<Props, {}> {
     return (
       <>
         {this.props.hidden ? (
-          <Grid item xs={12}>
+          <div className="mt5">
             <Button
+              className="mt5"
               variant="outlined"
               color="secondary"
               onClick={() => {
@@ -29,7 +31,7 @@ class PrefectureSelector extends React.Component<Props, {}> {
               <HomeIcon />
               地方選択へ戻る
             </Button>
-          </Grid>
+          </div>
         ) : (
           <Prefecture onChange={this.props.onChange} hidden={this.props.hidden} />
         )}

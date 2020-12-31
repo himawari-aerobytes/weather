@@ -18,6 +18,15 @@ body {
 .current_information {
   float: left;
 }
+.center {
+  text-align: center;
+}
+.m5 {
+  margin: 5px;
+}
+.mt5 {
+  margin-top: 30px;
+}
 
 .update_time {
   float: right;
@@ -51,4 +60,39 @@ body {
   height: 4px;
   background: -webkit-linear-gradient(to right, rgb(230, 90, 90), transparent);
   background: linear-gradient(to right, rgb(230, 90, 90), transparent);
+}
+.bold {
+  font-weight: bolder;
+}
+
+.else {
+  margin-left: 20px;
+  position: relative;
+  background: #f4f4f4;
+  padding: 2px 5px 2px 20px;
+  font-size: 20px;
+  color: #474747;
+  border-radius: 0 10px 10px 0;
+}
+
+.else:before {
+  font-family: 'Font Awesome 5 Free';
+  content: '\f041';
+  display: inline-block;
+  line-height: 40px;
+  position: absolute;
+  padding: 0em;
+  color: white;
+  background: #ff6363;
+  font-weight: 900;
+  width: 40px;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  left: -1.35em;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  border-radius: 50%;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.29);
 }

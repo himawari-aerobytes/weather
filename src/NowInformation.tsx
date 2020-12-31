@@ -34,7 +34,7 @@ class NowInformation extends Component<Props> {
         );
         break;
       default:
-        information = <>{num + Unit}</>;
+        information = <span className="bold">{num + Unit}</span>;
         break;
     }
     return information;
@@ -84,8 +84,12 @@ class NowInformation extends Component<Props> {
               </TableRow>
               <TableRow>
                 <TableCell>気温</TableCell>
-                <TableCell>{this.strInfo(this.props.Min_Temp, '℃')}</TableCell>
-                <TableCell>{this.strInfo(this.props.Max_Temp, '℃')}</TableCell>
+                <TableCell>
+                  <span className="bluecolor">{this.strInfo(this.props.Min_Temp, '℃')}</span>
+                </TableCell>
+                <TableCell>
+                  <span className="redcolor">{this.strInfo(this.props.Max_Temp, '℃')}</span>
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>雨量(1h)</TableCell>
@@ -99,10 +103,7 @@ class NowInformation extends Component<Props> {
               </TableRow>
               <TableRow>
                 <TableCell>観測地点</TableCell>
-                <TableCell colSpan={2}>
-                  {this.props.pref_ja}
-                  {this.props.address}
-                </TableCell>
+                <TableCell colSpan={2}>{this.props.address}</TableCell>
               </TableRow>
             </TableHead>
           </Table>

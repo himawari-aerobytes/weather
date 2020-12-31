@@ -14,7 +14,7 @@ type State = {
   Pref: string;
   isPref: boolean;
   isNowWeather: boolean;
-  isGetButton: boolean;
+  isLoading: boolean;
   index: number;
 };
 
@@ -30,7 +30,7 @@ class App extends React.Component<{}, State> {
       Pref: '石狩',
       isPref: true,
       isNowWeather: false,
-      isGetButton: true,
+      isLoading: false,
       index: 0,
     };
 
@@ -42,7 +42,7 @@ class App extends React.Component<{}, State> {
   }
 
   changePrefState(Pref: string) {
-    this.setState({ Pref: Pref, isPref: false });
+    this.setState({ Pref: Pref, isPref: false, isLoading: true });
     this.getAPI(Pref);
   }
   changeStn(index: number, stn: string) {
@@ -74,9 +74,9 @@ class App extends React.Component<{}, State> {
           Data: this.APIALLDATA[0],
           StnArray: str,
           Length: str.length - 1,
-          isGetButton: false,
           isNowWeather: true,
           StnName: str[0],
+          isLoading: false,
         });
 
         if (this.state.Length <= 0) {
@@ -103,18 +103,22 @@ class App extends React.Component<{}, State> {
     return (
       <div className="App">
         <Grid container>
-          <PrefectureSelector
-            onChange={this.changePrefState}
-            hidden={!this.state.isPref}
-            setState={this.setState}
-          />
-
-          <NowWeather
-            disable={!this.state.isNowWeather}
-            Data={this.state.Data}
-            pref_ja_arry={this.state.StnArray}
-            changeStn={this.changeStn}
-          />
+          <Grid item xs={12}>
+            <NowWeather
+              disable={this.state.isPref}
+              Data={this.state.Data}
+              pref_ja_arry={this.state.StnArray}
+              changeStn={this.changeStn}
+              isLoading={this.state.isLoading}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <PrefectureSelector
+              onChange={this.changePrefState}
+              hidden={!this.state.isPref}
+              setState={this.setState}
+            />
+          </Grid>
 
           <Grid item xs={12}>
             <footer>
