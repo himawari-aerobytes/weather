@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 
 type Props = {
   onChange: any;
+  hidden?: boolean;
 };
 
 type state = {
@@ -25,8 +26,8 @@ class Prefecturte extends React.Component<Props, state> {
   renderBranch(branches: Array<{ [key: string]: string }>, name: string) {
     const obj = branches.map((d) => (
       <Button
+        id={d.value}
         variant="outlined"
-        className=""
         type="button"
         onClick={() => this.handleChange(d.value)}
         value={d.value}
@@ -48,23 +49,29 @@ class Prefecturte extends React.Component<Props, state> {
 
   render() {
     return (
-      <Grid container spacing={3}>
-        {this.renderBranch(Hokkaido, '北海道')}
+      <>
+        {this.props.hidden ? (
+          <></>
+        ) : (
+          <Grid container spacing={3}>
+            {this.renderBranch(Hokkaido, '北海道')}
 
-        {this.renderBranch(Tohoku, '東北')}
+            {this.renderBranch(Tohoku, '東北')}
 
-        {this.renderBranch(Kanto, '関東')}
+            {this.renderBranch(Kanto, '関東')}
 
-        {this.renderBranch(Chubu, '中部')}
+            {this.renderBranch(Chubu, '中部')}
 
-        {this.renderBranch(Kinki, '近畿')}
+            {this.renderBranch(Kinki, '近畿')}
 
-        {this.renderBranch(Chugoku, '中国')}
+            {this.renderBranch(Chugoku, '中国')}
 
-        {this.renderBranch(Shikoku, '四国')}
+            {this.renderBranch(Shikoku, '四国')}
 
-        {this.renderBranch(Kyushu, '九州')}
-      </Grid>
+            {this.renderBranch(Kyushu, '九州')}
+          </Grid>
+        )}
+      </>
     );
   }
 }

@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import WeatherIcon from './weather';
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import CloseIcon from '@material-ui/icons/Close';
@@ -64,12 +62,13 @@ class NowInformation extends Component<Props> {
 
   render() {
     return (
-      <div>
+      <>
         <div>
           <div className="current_information">
             <h2>現在の情報</h2>
             <p>
-              {this.props.pref_ja} {this.props.stn_name_ja}
+              {this.props.pref_ja}
+              {this.props.stn_name_ja}
             </p>
           </div>
           <p className="update_time">
@@ -111,8 +110,7 @@ class NowInformation extends Component<Props> {
             </TableRow>
           </Table>
         </TableContainer>
-        {window.scrollTo(0, 150)}
-      </div>
+      </>
     );
   }
 }

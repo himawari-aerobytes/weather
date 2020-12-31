@@ -2,46 +2,48 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import './elseArea.css';
 import Grid from '@material-ui/core/Grid';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Fade from '@material-ui/core/Fade';
 
 type Props = {
-  pref_ja_arry: Array<{ [key: string]: string }> | null;
+  pref_ja_arry: Array<string>;
   stn_name_ja: string;
   onSelect: any;
 };
+type State = {
+  index: number;
+};
 
-class ElseArea extends Component<Props> {
+class ElseArea extends React.Component<Props, State> {
+  private index: number;
   constructor(props: any) {
     super(props);
-    this.setAPI = this.setAPI.bind(this);
+    this.state = {
+      index: 0,
+    };
+    this.index = 0;
   }
+
   render() {
     return (
-      <div>
+      <>
         <Grid item xs={12}>
-          {this.props.pref_ja_arry?.map((d) =>
-            d.label === this.props.stn_name_ja ? (
-              <Button variant="outlined" disabled value={d.value}>
-                {d.label}
-              </Button>
-            ) : (
+          {this.props.pref_ja_arry?.map((d, i) => (
+            <>
               <Button
+                key={'else' + d}
                 variant="outlined"
-                onClick={() => this.props.onSelect(d.value)}
-                value={d.value}
+                disabled={d === this.props.stn_name_ja}
+                onClick={() => {
+                  this.props.onSelect(i, d);
+                }}
+                value={i}
               >
-                {d.label}
+                {d}
               </Button>
-            )
-          )}
+            </>
+          ))}
         </Grid>
-      </div>
+      </>
     );
-  }
-  setAPI(e: number) {
-    this.props.onSelect(e);
   }
 }
 
