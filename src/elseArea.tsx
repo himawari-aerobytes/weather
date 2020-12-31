@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import './elseArea.css';
 import Grid from '@material-ui/core/Grid';
@@ -27,19 +27,17 @@ class ElseArea extends React.Component<Props, State> {
       <>
         <Grid item xs={12}>
           {this.props.pref_ja_arry?.map((d, i) => (
-            <>
-              <Button
-                key={'else' + d}
-                variant="outlined"
-                disabled={d === this.props.stn_name_ja}
-                onClick={() => {
-                  this.props.onSelect(i, d);
-                }}
-                value={i}
-              >
-                {d}
-              </Button>
-            </>
+            <Button
+              key={'else' + d + i}
+              variant="outlined"
+              disabled={d === this.props.stn_name_ja}
+              onClick={() => {
+                this.props.onSelect(i, d);
+              }}
+              value={i}
+            >
+              {d}
+            </Button>
           ))}
         </Grid>
       </>

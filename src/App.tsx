@@ -2,10 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import './App.css';
 import { exit } from 'process';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import PrefectureSelector from './PrefectureSelector';
 import NowWeather from './NowWeather';
 
@@ -46,7 +43,7 @@ class App extends React.Component<{}, State> {
 
   changePrefState(Pref: string) {
     this.setState({ Pref: Pref, isPref: false });
-    this.getAPI();
+    this.getAPI(Pref);
   }
   changeStn(index: number, stn: string) {
     this.setState({ StnName: stn });
@@ -54,11 +51,11 @@ class App extends React.Component<{}, State> {
     this.setData(index);
   }
 
-  getAPI(i: number = 0): void {
+  getAPI(Pref: string): void {
     axios
       .get('https://jjwd.info/api/v2/stations/search', {
         params: {
-          pref_ja: this.state.Pref,
+          pref_ja: Pref,
         },
       })
       .then((response) => {
@@ -69,7 +66,6 @@ class App extends React.Component<{}, State> {
         }
 
         let str: Array<string> = [];
-        let j = 0;
         Data.forEach((element: any) => {
           str.push(element.stn_name_ja);
         });
@@ -80,6 +76,7 @@ class App extends React.Component<{}, State> {
           Length: str.length - 1,
           isGetButton: false,
           isNowWeather: true,
+          StnName: str[0],
         });
 
         if (this.state.Length <= 0) {
@@ -102,31 +99,10 @@ class App extends React.Component<{}, State> {
     });
   }
 
-  renderInputPoint(State: number) {
-    return (
-      <tr>
-        <td>観測点</td>
-        <td>
-          <Select
-            onChange={(e) => {
-              const keyword = e.target.value;
-              if (typeof keyword === 'string') {
-                this.setState({ index: this.getIndex(keyword) });
-              }
-            }}
-            defaultValue=""
-          >
-            {this.state.StnArray?.map((d) => <MenuItem value={d}>{d}</MenuItem>) || ''}
-          </Select>
-        </td>
-      </tr>
-    );
-  }
-
   render() {
     return (
       <div className="App">
-        <Grid container spacing={3}>
+        <Grid container>
           <PrefectureSelector
             onChange={this.changePrefState}
             hidden={!this.state.isPref}
@@ -141,10 +117,6 @@ class App extends React.Component<{}, State> {
           />
 
           <Grid item xs={12}>
-            <h3>県名</h3>
-            <p>{this.state.Pref}</p>
-          </Grid>
-          <Grid item xs={12}>
             <footer>
               最新の気象データ（https://www.data.jma.go.jp/obd/stats/data/mdrr/）を基に jjwd.info
               が加工したデータ を利用して本サイトを表示しております。
@@ -155,12 +127,5 @@ class App extends React.Component<{}, State> {
     );
   }
 }
-
-const inputcomments = [
-  '1.最初に県名を入力してください',
-  '2.観測所名を指定してください',
-  '',
-  '正しい県名を入れてください',
-];
 
 export default App;

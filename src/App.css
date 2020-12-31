@@ -40,3 +40,15 @@ body {
   vertical-align: top;
   display: inline;
 }
+
+.redbar {
+  position: relative;
+  padding: 0.25em 0;
+}
+.redbar:after {
+  content: '';
+  display: block;
+  height: 4px;
+  background: -webkit-linear-gradient(to right, rgb(230, 90, 90), transparent);
+  background: linear-gradient(to right, rgb(230, 90, 90), transparent);
+}

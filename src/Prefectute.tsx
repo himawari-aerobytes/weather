@@ -1,8 +1,6 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
 import './Prefecture.css';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 type Props = {
@@ -26,7 +24,7 @@ class Prefecturte extends React.Component<Props, state> {
   renderBranch(branches: Array<{ [key: string]: string }>, name: string) {
     const obj = branches.map((d) => (
       <Button
-        id={d.value}
+        key={d.value + 'Branch'}
         variant="outlined"
         type="button"
         onClick={() => this.handleChange(d.value)}
