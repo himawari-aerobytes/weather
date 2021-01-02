@@ -9,7 +9,7 @@ type Props = {
 };
 
 type state = {
-  InPref: string;
+  Pref: string;
 };
 
 class Prefecturte extends React.Component<Props, state> {
@@ -17,7 +17,7 @@ class Prefecturte extends React.Component<Props, state> {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      InPref: '東京',
+      Pref: '東京',
     };
   }
 

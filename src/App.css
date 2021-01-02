@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz&display=swap');
+.main-container {
+  margin-left: 10px;
+  margin-right: 10px;
+}
 body {
   font-family: sans-serif;
 }

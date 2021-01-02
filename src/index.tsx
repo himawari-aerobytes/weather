@@ -3,22 +3,18 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import Container from '@material-ui/core/Container';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import queryString from 'query-string';
 
 ReactDOM.render(
   <React.StrictMode>
-    <div className="allContainer">
-      <Container maxWidth="md">
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-        />
-        <div className="container">
-          <h1 className="Title">WeatherInformation</h1>
-          <App />
-        </div>
-      </Container>
-    </div>
+    <Router>
+      <Route
+        exact
+        path="/"
+        render={(props) => <App Query={queryString.parse(props.location.search)} />}
+      />
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );

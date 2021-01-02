@@ -5,7 +5,11 @@ import { exit } from 'process';
 import Grid from '@material-ui/core/Grid';
 import PrefectureSelector from './PrefectureSelector';
 import NowWeather from './NowWeather';
+import { Container } from '@material-ui/core';
 
+type Props = {
+  Query?: any;
+};
 type State = {
   Data: any;
   StnArray: Array<string>;
@@ -18,7 +22,7 @@ type State = {
   index: number;
 };
 
-class App extends React.Component<{}, State> {
+class App extends React.Component<Props, State> {
   public APIALLDATA: any;
   constructor(props: any) {
     super(props);
@@ -51,8 +55,8 @@ class App extends React.Component<{}, State> {
     this.setData(index);
   }
 
-  getAPI(Pref: string): void {
-    axios
+  getAPI(Pref: string, index?: number) {
+    return axios
       .get('https://jjwd.info/api/v2/stations/search', {
         params: {
           pref_ja: Pref,
@@ -76,12 +80,12 @@ class App extends React.Component<{}, State> {
           Length: str.length - 1,
           isNowWeather: true,
           StnName: str[0],
-          isLoading: false,
         });
 
         if (this.state.Length <= 0) {
           throw new Error('Internal Error　県の情報を取得できませんでした。');
         }
+        this.setState({ isLoading: false });
       })
       .catch((e) => {
         alert('debugger\n' + e);
@@ -99,35 +103,70 @@ class App extends React.Component<{}, State> {
     });
   }
 
+  toStnIndex(Stn?: string): number {
+    if (Stn === undefined) {
+      return 0;
+    }
+    const index = this.state.StnArray.indexOf(Stn);
+
+    if (index >= 0) {
+      return index;
+    } else {
+      return 0;
+    }
+  }
+
+  async componentDidMount() {
+    window.scrollTo(0, 0);
+
+    if (this.props.Query.Pref) {
+      this.setState({ isPref: false, isLoading: true });
+      const Pref = this.props.Query.Pref;
+      const Stn = this.props.Query.Stn;
+      await this.getAPI(Pref);
+      const index = this.toStnIndex(Stn);
+      this.setData(index);
+      this.setState({
+        StnName: Stn,
+        isNowWeather: true,
+        index: index,
+      });
+    }
+  }
+
   render() {
     return (
-      <div className="App">
-        <Grid container>
-          <Grid item xs={12}>
-            <NowWeather
-              disable={this.state.isPref}
-              Data={this.state.Data}
-              pref_ja_arry={this.state.StnArray}
-              changeStn={this.changeStn}
-              isLoading={this.state.isLoading}
-            />
+      <>
+        <Container maxWidth="md">
+          <Grid container>
+            <Grid item xs={12}>
+              <h1 className="bluecolor">WeatherInformation</h1>
+            </Grid>
+            <Grid item xs={12}>
+              <NowWeather
+                disable={this.state.isPref}
+                Data={this.state.Data}
+                pref_ja_arry={this.state.StnArray}
+                changeStn={this.changeStn}
+                isLoading={this.state.isLoading}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <PrefectureSelector
+                onChange={this.changePrefState}
+                hidden={!this.state.isPref}
+                setState={this.setState}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <footer>
+                最新の気象データ（https://www.data.jma.go.jp/obd/stats/data/mdrr/）を基に jjwd.info
+                が加工したデータ を利用して本サイトを表示しております。
+              </footer>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <PrefectureSelector
-              onChange={this.changePrefState}
-              hidden={!this.state.isPref}
-              setState={this.setState}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <footer>
-              最新の気象データ（https://www.data.jma.go.jp/obd/stats/data/mdrr/）を基に jjwd.info
-              が加工したデータ を利用して本サイトを表示しております。
-            </footer>
-          </Grid>
-        </Grid>
-      </div>
+        </Container>
+      </>
     );
   }
 }

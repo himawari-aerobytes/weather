@@ -2,6 +2,7 @@ import React from 'react';
 import ElseArea from './elseArea';
 import NowInformation from './NowInformation';
 import './App.css';
+//import { faWindowRestore } from '@fortawesome/free-solid-svg-icons';
 
 const Loading = require('./Radio-1s-200px.svg');
 
