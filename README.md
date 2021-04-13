@@ -43,3 +43,7 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 # weather_test
+
+## 運用
+herokuのサーバで運用しています。
+(サーバ)[https://weather.gms-himawari.com]
