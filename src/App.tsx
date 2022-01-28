@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import PrefectureSelector from './PrefectureSelector';
 import NowWeather from './NowWeather';
 import { Container } from '@material-ui/core';
+import cors from 'cors';
+app.use(cors());
 
 type Props = {
   Query?: any;
@@ -23,6 +25,7 @@ type State = {
 };
 
 class App extends React.Component<Props, State> {
+
   public APIALLDATA: any;
   constructor(props: any) {
     super(props);
